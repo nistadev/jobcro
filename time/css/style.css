@@ -14,3 +14,49 @@ body{
 .accions span{
     cursor: pointer;
 }
+
+#footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: auto;
+}
+.footer-content{
+	text-align: center;
+	padding: 10px;
+}
+
+
+#formulari-hores #camp-hora-inici{
+}
+
+#formulari-hores #camp-hora-fi{
+	
+}
+
+#formulari-hores #camp-client{
+	
+}
+
+#formulari-hores #camp-descripcio{
+	
+}
+
+#formulari-hores #camp-boto-formulari{
+	margin-top: 25px;
+}
+
+#taula-registres tbody.loading tr{
+	display: none;
+}
+
+.loading:after {
+	content: "";
+	background-image: url("../img/loader.gif");
+	background-position: center;
+	background-size: 250%;
+	width: 50px;
+	height: 50px;
+	display: block;
+}

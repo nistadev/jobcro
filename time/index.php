@@ -1,5 +1,4 @@
 <?php include("header.php"); ?>
-<body>
     <header>
     </header>
     <main>
@@ -33,15 +32,9 @@
         }
 
     } else {
-        if (!isset($page)) 
-            echo "Hola";
-        else
-            echo "<h1>404</h1>";
-    }
+        echo "<h1>Error 404: Pagina no trobada</h1>";
+    } ?>
 
-
-?>
     </main>
 
-</body>
-</html>
+<?php include("footer.php"); ?>

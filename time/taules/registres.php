@@ -11,6 +11,7 @@
                     <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1 text-center">Accions</th>
                 </tr>
             </thead>
+            <tbody>
     <?php   $query = "SELECT * FROM work_done";
             $result = $conn->query($query);
             while($row = $result->fetch_array(MYSQLI_ASSOC)){?>
@@ -22,7 +23,7 @@
                             <?php echo $row["hora_final"]; ?>
                         </td>
                         <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                            <?php echo $row["hora_final"] - $row["hora_inicial"]; ?>
+                            <?php echo (strtotime($row["hora_final"]) - strtotime($row["hora_inicial"])) / 3600, "h"; ?>
                         </td>
                         <td class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                             <?php echo $row["client"]; ?>
@@ -36,6 +37,7 @@
                         </td>
                     </tr>
             <?php } ?>
+            </tbody>
         </table>
     </div>
 </div>

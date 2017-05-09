@@ -1,0 +1,16 @@
+body{
+    font-size: 14px;
+}
+.formulari{
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#taula-registres {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.accions span{
+    cursor: pointer;
+}

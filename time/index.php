@@ -12,13 +12,6 @@
 
             include("formularis/entrar_hores.php");
 
-            if(isset($miss)):
-                if($miss != "ko")
-                    echo "<small>Dades entrades correctament!</small>";
-                else
-                    echo "<small>Error al entrar dades.</small>";
-            endif;
-
         } else if ($page == "registres") {
             include("connection.php");
             if(!$conn){

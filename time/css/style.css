@@ -47,6 +47,12 @@ body{
 #formulari-hores #camp-boto-formulari{
 	margin-top: 25px;
 }
+#formulari-hores #missatge-error{
+    margin-top: 20px;
+}
+#formulari-hores #missatge-error span{
+    color: red;
+}
 
 #taula-registres tbody.loading tr{
 	display: none;

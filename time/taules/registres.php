@@ -32,8 +32,10 @@
                             <?php echo $row["descripcio"]; ?>
                         </td>
                         <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1 text-center accions">
-                            <span class="glyphicon glyphicon-remove"></span>
-                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="glyphicon glyphicon-remove" title="Elimina registre"></span>
+                            <span class="glyphicon glyphicon-pencil" title="Edita registre"></span>
+                            <span class="glyphicon glyphicon-download-alt" title="Descargar registre"></span>
+                            <span class="glyphicon glyphicon-upload" title="Envia i elimina registre"></span>
                         </td>
                     </tr>
             <?php } ?>

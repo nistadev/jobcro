@@ -1,9 +1,10 @@
 body{
     font-size: 14px;
 }
-.formulari{
+#formulari-hores {
     max-width: 600px;
     margin: 0 auto;
+    text-align: left;
 }
 
 #taula-registres {
@@ -27,8 +28,8 @@ body{
 	padding: 10px;
 }
 
-
 #formulari-hores #camp-hora-inici{
+
 }
 
 #formulari-hores #camp-hora-fi{

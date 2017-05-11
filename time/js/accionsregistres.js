@@ -2,6 +2,7 @@ $(document).ready(function(){
     var vdata, 
         vhoraInicial, 
         vhoraFinal, 
+        vtempsTotal,
         vclient, 
         vconcepte, 
         vdescripcio,
@@ -39,7 +40,9 @@ $(document).ready(function(){
             client = $(this).parent().siblings(".camp-client"),
             concepte = $(this).parent().siblings(".camp-concepte"),
             descripcio = $(this).parent().siblings(".camp-descripcio"),
-            idRegistre = $(this).parent().parent().data("id");
+            idRegistre = $(this).parent().parent().data("id"),
+            formulari = $(this).parent().parent().find(".form-control"),
+            altresIconesAccions = $(this).parent().parent().siblings().children().children("span");
 
         //no estem editant
         if ($(this).hasClass("glyphicon-pencil")) {
@@ -48,7 +51,7 @@ $(document).ready(function(){
             $(this).removeClass("glyphicon-pencil").addClass("glyphicon-ok");
             $(this).siblings().hide();
             $(this).parent().append("<span class='glyphicon glyphicon-remove cancela'></span>");
-            $(this).parent().parent().siblings().children().children("span").hide();
+            altresIconesAccions.hide();
 
             fesCampsEditables();
 
@@ -59,7 +62,7 @@ $(document).ready(function(){
                 $.ajax({
                     url: 'accions.php',
                     type: 'POST',
-                    data: $(this).parent().parent().find(".form-control").serialize() + "&id=" + idRegistre,
+                    data: formulari.serialize() + "&id=" + idRegistre,
                     context: accioClicada,
                     success: function(data){
                         return console.log(data);
@@ -72,7 +75,7 @@ $(document).ready(function(){
                 surtModeEdicio();
                 $(this).addClass("glyphicon-pencil").removeClass("glyphicon-ok");
                 $(this).siblings("span.glyphicon-remove.cancela").remove();
-                $(this).parent().parent().siblings().children().children("span").show();
+                altresIconesAccions.show();
                 $(this).siblings().show();
             } else { // formulari no valid
                 alert("Camps invalids, comproveu que no hi haigui cap camp buit i que la data d'inici no sigui mes gran que la final.");
@@ -92,19 +95,24 @@ $(document).ready(function(){
             vclient = client.text().trim();
             vconcepte = concepte.text().trim();
             vdescripcio = descripcio.text().trim();
+            vtempsTotal = tempsTotal.text();
         }
 
         function copiaValors(guardar = false){ //copia els valors del formulari
             vdata = data.children().val();
-            if(guardar){
-                vdata = vdata.split("-");
-                vdata = vdata[2] + "/" + vdata[1] + "/" + vdata[0].charAt(2) + vdata[0].charAt(3);
-            }
             vhoraInicial = horaInicial.children().val();
             vhoraFinal = horaFinal.children().val();
+            vtempsTotal = tempsTotal.text();
             vclient = client.children().val();
             vconcepte = concepte.children().val();
             vdescripcio = descripcio.children().val();
+            if(guardar){
+                var timestampFinal = (new Date(vdata + " " + vhoraFinal).getTime() / 1000);
+                var timestampInici = (new Date(vdata + " " + vhoraInicial).getTime() / 1000);
+                vtempsTotal = (timestampFinal - timestampInici) / 3600 + "h";
+                vdata = vdata.split("-");
+                vdata = vdata[2] + "/" + vdata[1] + "/" + vdata[0].charAt(2) + vdata[0].charAt(3);
+            }
         }
 
         function fesCampsEditables(){ // sustitueix els camps per camps editables amb les dades que teniem
@@ -130,6 +138,7 @@ $(document).ready(function(){
             data.html(vdata);
             horaInicial.html(vhoraInicial);
             horaFinal.html(vhoraFinal);
+            tempsTotal.html(vtempsTotal);
             client.html(vclient);
             concepte.html(vconcepte);
             descripcio.html(vdescripcio);
@@ -162,4 +171,41 @@ $(document).ready(function(){
         $(this).parent().parent().siblings().children().children("span").show();
         $(this).remove();
     });
+
+    /*** copiar registre ***/
+    accions.on('click', '#copia-registre', function(){
+        var registre = $(this).parent().parent().find("td").toArray(),
+            vregistre = [],
+            aquest = this;
+
+        registre.pop();
+        registre = $(registre);
+        registre.each(function(){return vregistre.push($(this).text().trim());});
+
+        //formatem el text perque sigui com volguem
+        registreFormatat = "["+vregistre[0]+"]\n"+
+                            vregistre[1]+"->"+vregistre[2]+" = "+vregistre[3]+";"+
+                            vregistre[4]+"; "+vregistre[5]+"; "+vregistre[6]+".";
+
+        function copiaRegistre() {
+            var textArea = document.createElement("textarea");
+            textArea.value = registreFormatat;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    $(aquest).parent().parent().fadeOut(50).fadeIn(300);
+                } else {
+                    alert("Hi ha hagut un error i no s'ha pogut copiar el registre.");
+                }
+            } catch (err) {
+                console.log('Oops, unable to copy', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        copiaRegistre();
+    });
+        
 });

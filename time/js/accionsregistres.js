@@ -207,5 +207,35 @@ $(document).ready(function(){
 
         copiaRegistre();
     });
+
+    accions.on('click', '#enviar-registre', function(){
+        var registre = $(this).parent().parent().find("td").toArray(),
+            vregistre = [],
+            aquest = this;
+        registre.pop();
+        registre = $(registre);
+        registre.each(function(){return vregistre.push($(this).text().trim());});
+
+        //formatem el text perque sigui com volguem
+        registreFormatat = "["+vregistre[0]+"]\n"+
+                            vregistre[1]+"->"+vregistre[2]+" = "+vregistre[3]+";"+
+                            vregistre[4]+"; "+vregistre[5]+"; "+vregistre[6]+".";
+
+
+        var caixa = $(this).parent().find(".enviar-registre-opcions");
+        console.log(caixa.length);
+        if (caixa.length > 0) caixa.remove();
+        else $(this).parent().append(`
+            <div class="enviar-registre-opcions">
+                <div class="opcions">
+                    <span class="glyphicon glyphicon-list-alt"></span>
+                    <span class="glyphicon glyphicon-envelope"></span>
+                </div>
+            </div>
+        `);
+        
+
+
+    });
         
 });

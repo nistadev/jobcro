@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ca">
 <head>
     <title>TIME - Your Professional Job Timer</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -14,13 +14,16 @@
 </header>
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
     <div class="container">
-        <!-- <a class="navbar-brand" href="index.php?page=inici">TIME</a> -->
+        <a class="navbar-brand" href="index.php?page=inici">TIME</a>
         <ul class="nav navbar-nav text-center">
             <li>
                 <a href="index.php?page=entra_hores">Entrar Hores</a>
             </li>
             <li>
                 <a href="index.php?page=registres">Registres</a>
+            </li>
+            <li>
+                <a href="index.php?page=importar">Importar</a>
             </li>
         </ul>
     </div>

@@ -6,23 +6,15 @@
     $page = $_GET["page"];
 
     if (isset($page) && $page != "") {
-
-        if ($page == "entra_hores") {
-            $miss = $_GET["msg"];
-
-            include("formularis/entrar_hores.php");
-
-        } else if ($page == "registres") {
-            include("connection.php");
-            if(!$conn){
-                    echo "Error al connectar amb la base de dades.<br/>";
-                    exit();
-                } else {
-                    include("taules/registres.php");
-                } ?>    
-        <?php } else if ($page == "contrasenya_perduda") {
-            include("lost_password.php");
-        }
+        include("connection.php");
+        if ($page == "entra_hores")
+            include("pagines/formularis/entrar_hores.php");
+        else if ($page == "registres")
+            include("pagines/registres.php");
+        elseif ($page == "importar")
+            include("pagines/importador.php");
+        elseif ($page == "inici")
+            include("pagines/inici.php");
 
     } else {
         echo "<h1>Error 404: Pagina no trobada</h1>";

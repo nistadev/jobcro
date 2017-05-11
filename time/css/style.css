@@ -6,6 +6,11 @@ body{
     margin: 0 auto;
     text-align: left;
 }
+#formulari-importacio {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
 
 #taula-registres {
     max-width: 1280px;
@@ -73,3 +78,44 @@ body{
 	height: 50px;
 	display: block;
 }
+
+
+.enviar-registre-opcions{
+    position: relative;
+    width: 0;
+    height: 0;
+    font-size: 1.3em;
+}
+
+.enviar-registre-opcions .opcions {
+    position: absolute;
+    background: #fff;
+    top: 5px;
+    left: -7px;
+    border: 1px solid #aaa;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+.enviar-registre-opcions .opcions:after {
+    bottom: 100%;
+    right: -1px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(79, 213, 64, 0);
+    border-bottom-color: #aaa;
+    border-width: 10px;
+}
+
+.enviar-registre-opcions .opcions span{
+    padding: 10px;
+    top: 0;
+}
+.enviar-registre-opcions .opcions span:hover{
+    background-color: #aaa;
+}
+

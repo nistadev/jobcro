@@ -1,5 +1,5 @@
 <div id="taula-registres">
-    <div class="table-responsive">
+    <div class="table-respodnsive">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -43,8 +43,14 @@
                             <span id="eliminar-registre" class="glyphicon glyphicon-remove" title="Elimina registre"></span>
                             <span id="editar-registre" class="glyphicon glyphicon-pencil" title="Edita registre"></span>
                             <span id="copia-registre" class="glyphicon glyphicon-duplicate" title="Copia registre"></span>
-                            <span id="enviar-registre" class="glyphicon glyphicon-upload" title="Envia i elimina"></span>
+                            <span id="enviar-registre" class="glyphicon glyphicon-share-alt" title="Envia i elimina"></span>
                         </td>
+                        <div class="enviar-registre-opcions">
+                            <div class="opcions">
+                                <span class="glyphicon glyphicon-list-alt excel"></span>
+                                <span class="glyphicon glyphicon-envelope mail"></span>
+                            </div>
+                        </div>
                     </tr>
             <?php } ?>
             </tbody>

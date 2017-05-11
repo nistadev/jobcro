@@ -37,8 +37,9 @@ $(document).ready(function(){
     
     form.submit(function(e){
         e.preventDefault();
-        $.post("entra_hores.php", $(this).serialize())
-            .done(function(){
+        $.post("pagines/entra_hores.php", $(this).serialize())
+            .done(function(dades){
+                console.log(dades);
                 document.getElementById("formulari-hores").reset();
                 document.getElementById('data').valueAsDate = new Date();
                 missatgeError.html("<span style='color: green;'>Dades enviades!</span>").show().fadeOut(2000);

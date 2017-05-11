@@ -6,5 +6,7 @@ create table work_done (
     hora_final time,
     client varchar(15),
     descripcio varchar(50),
+    data date,
+    concepte varchar(20), 
     primary key (id)
 );

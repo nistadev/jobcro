@@ -6,10 +6,15 @@ $(document).ready(function(){
         vclient, 
         vconcepte, 
         vdescripcio,
-        accions = $(".accions");
+        accions = $(".accions"),
+        accionsGeneral = $("#accionsGeneral");
+
+    /*
+     * ACCIONS UN SOL REGISTRE
+     */
 
     /*** eliminar registre ***/
-    accions.on('click', '#eliminar-registre', function(){
+    accions.on('click', '.eliminar-registre', function(){
         var accioClicada = this;
         var idRegistre = $(this).parent().parent().data("id");
         var confirmacio = confirm("Estas segur de que vols eliminar el registre?");
@@ -31,7 +36,7 @@ $(document).ready(function(){
     });
 
     /*** editar registre ***/
-    accions.on('click', '#editar-registre', function(){
+    accions.on('click', '.editar-registre', function(){
         var accioClicada = this;
         var data = $(this).parent().siblings(".camp-data"),
             horaInicial = $(this).parent().siblings(".camp-hora_inicial"),
@@ -49,7 +54,7 @@ $(document).ready(function(){
             copiaText();
             descripcio.html("");
             $(this).removeClass("glyphicon-pencil").addClass("glyphicon-ok");
-            $(this).siblings().hide();
+            $(this).siblings("span").hide();
             $(this).parent().append("<span class='glyphicon glyphicon-remove cancela'></span>");
             altresIconesAccions.hide();
 
@@ -76,7 +81,7 @@ $(document).ready(function(){
                 $(this).addClass("glyphicon-pencil").removeClass("glyphicon-ok");
                 $(this).siblings("span.glyphicon-remove.cancela").remove();
                 altresIconesAccions.show();
-                $(this).siblings().show();
+                $(this).siblings("span").show();
             } else { // formulari no valid
                 alert("Camps invalids, comproveu que no hi haigui cap camp buit i que la data d'inici no sigui mes gran que la final.");
             } // validacio formulari
@@ -148,13 +153,14 @@ $(document).ready(function(){
 
     /*** cancelar edicio registre ***/
     accions.on('click', 'span.glyphicon-remove.cancela', function(){
-        var accioClicada = this;
-        var data = $(this).parent().siblings(".camp-data");
-        var horaInicial = $(this).parent().siblings(".camp-hora_inicial");
-        var horaFinal = $(this).parent().siblings(".camp-hora_final");
-        var client = $(this).parent().siblings(".camp-client");
-        var concepte = $(this).parent().siblings(".camp-concepte");
-        var descripcio = $(this).parent().siblings(".camp-descripcio");
+        var accioClicada = this,
+            data = $(this).parent().siblings(".camp-data"),
+            horaInicial = $(this).parent().siblings(".camp-hora_inicial"),
+            horaFinal = $(this).parent().siblings(".camp-hora_final"),
+            client = $(this).parent().siblings(".camp-client"),
+            concepte = $(this).parent().siblings(".camp-concepte"),
+            descripcio = $(this).parent().siblings(".camp-descripcio"),
+            altresIconesAccions = $(this).parent().parent().siblings().children().children("span");
 
         tornaValors();
 
@@ -166,26 +172,18 @@ $(document).ready(function(){
             concepte.html(vconcepte);
             descripcio.html(vdescripcio);
         }
-        $(this).siblings("#editar-registre").addClass("glyphicon-pencil").removeClass("glyphicon-ok");
-        $(this).siblings().show();
-        $(this).parent().parent().siblings().children().children("span").show();
+        $(this).siblings(".editar-registre").addClass("glyphicon-pencil").removeClass("glyphicon-ok");
+        $(this).siblings("span").show();
+        altresIconesAccions.show();
         $(this).remove();
     });
 
     /*** copiar registre ***/
-    accions.on('click', '#copia-registre', function(){
-        var registre = $(this).parent().parent().find("td").toArray(),
-            vregistre = [],
-            aquest = this;
+    accions.on('click', '.copia-registre', function(){
+        var aquest = this,
+            registreFormatat;
 
-        registre.pop();
-        registre = $(registre);
-        registre.each(function(){return vregistre.push($(this).text().trim());});
-
-        //formatem el text perque sigui com volguem
-        registreFormatat = "["+vregistre[0]+"]\n"+
-                            vregistre[1]+"->"+vregistre[2]+" = "+vregistre[3]+";"+
-                            vregistre[4]+"; "+vregistre[5]+"; "+vregistre[6]+".";
+        registreFormatat = exportaRegistres([aquest]);
 
         function copiaRegistre() {
             var textArea = document.createElement("textarea");
@@ -208,34 +206,178 @@ $(document).ready(function(){
         copiaRegistre();
     });
 
-    accions.on('click', '#enviar-registre', function(){
-        var registre = $(this).parent().parent().find("td").toArray(),
-            vregistre = [],
-            aquest = this;
-        registre.pop();
-        registre = $(registre);
-        registre.each(function(){return vregistre.push($(this).text().trim());});
-
-        //formatem el text perque sigui com volguem
-        registreFormatat = "["+vregistre[0]+"]\n"+
-                            vregistre[1]+"->"+vregistre[2]+" = "+vregistre[3]+";"+
-                            vregistre[4]+"; "+vregistre[5]+"; "+vregistre[6]+".";
-
-
+    /*** enviar registre ***/
+    accions.on('click', '.enviar-registre', function(){
         var caixa = $(this).parent().find(".enviar-registre-opcions");
-        console.log(caixa.length);
-        if (caixa.length > 0) caixa.remove();
-        else $(this).parent().append(`
-            <div class="enviar-registre-opcions">
-                <div class="opcions">
-                    <span class="glyphicon glyphicon-list-alt"></span>
-                    <span class="glyphicon glyphicon-envelope"></span>
-                </div>
-            </div>
-        `);
-        
+        if (!caixa.hasClass("visible"))
+            caixa.addClass("visible");
+        else
+            caixa.removeClass("visible");
+    });
 
+    /*** seleccionar registre ***/
+    accions.on('click', '.seleccionar-registre', function(){
+        var check = $(this),
+            filaPare = $(this).parent().parent();
+
+        if (check.hasClass("glyphicon-unchecked")) {
+            check.addClass("glyphicon-check").removeClass("glyphicon-unchecked");
+            filaPare.attr("seleccionat", 1);
+            if(!accionsGeneral.hasClass("visible"))
+                accionsGeneral.addClass("visible");
+        } else {
+            check.addClass("glyphicon-unchecked").removeClass("glyphicon-check");
+            filaPare.attr("seleccionat", 0);
+            comprovaSeleccionades();
+        }
 
     });
+
+    accions.on('click', '.opcions .mail', function(){
+        console.log("mail");
+    });
+
+
+    /*
+     * ACCIONS VARIS REGISTRES
+     */
+
+    /*** eliminar registres seleccionats ***/
+    /*accionsGeneral.on('click', '#eliminar-registres', function(){
+        var accioClicada = this;
+        var idRegistre = $(this).parent().parent().data("id");
+        var confirmacio = confirm("Estas segur de que vols eliminar el registre?");
+        if(confirmacio){
+            $.ajax({
+                url: 'accions.php?id=' + idRegistre,
+                type: 'DELETE',
+                context: accioClicada,
+                success: function(data){
+                    console.log(data);
+                    return $(this).parent().parent().fadeOut("slow");
+                },
+                error: function(data){
+                    console.log("Error");
+                }
+            });
+        }
+
+    });*/
+
+    /*** copiar registres seleccionats ***/
+    accionsGeneral.on('click', '#copia-registres', function(){
+        var aquest = this,
+            registreFormatat;
+
+        var registres = $("#registres tbody tr[seleccionat='1']");
+        registreFormatat = exportaRegistres(registres, true);
+
+        function copiaRegistre() {
+            var textArea = document.createElement("textarea");
+            textArea.value = registreFormatat;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    $("#registres tr[seleccionat='1']").fadeOut(50).fadeIn(300);
+                } else {
+                    alert("Hi ha hagut un error i no s'ha pogut copiar el registre.");
+                }
+            } catch (err) {
+                console.log('Oops, unable to copy', err);
+            }
+            document.body.removeChild(textArea);
+        }
+        copiaRegistre();
+    });
+
+    /*** enviar registres seleccionats ***/
+    /*accionsGeneral.on('click', '#enviar-registres', function(){
+        var caixa = $(this).parent().find(".enviar-registres-opcions");
+        if (!caixa.hasClass("visible"))
+            caixa.addClass("visible");
+        else
+            caixa.removeClass("visible");
+    });*/
+
+    /*** seleccionar tots registres ***/
+    accionsGeneral.on('click', '#seleccionar-registres', function(){
+        var registres = $("#registres tbody tr"),
+            checks = $(".seleccionar-registre"),
+            totsSeleccionats = 0,
+            numSeleccionats = 0;
         
+        registres.each(function(){
+            if ($(this).attr("seleccionat") == "1")
+                numSeleccionats++;
+        });
+        if (numSeleccionats == registres.length) {
+            registres.attr("seleccionat", 0);
+            checks.removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+            $(this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+        } else {
+            registres.attr("seleccionat", 1);
+            checks.removeClass("glyphicon-unchecked").addClass("glyphicon-check");
+            $(this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
+        }
+        comprovaSeleccionades();
+    });
+
+    accionsGeneral.on('click', '.opcions .mail', function(){
+        console.log("mail");
+    });
+
+
+
+
+
+
+    /*
+     * FUNCIONS GENERALS
+     */
+
+    function comprovaSeleccionades() {
+        var files = $("#taula-registres tr"),
+            algunSeleccionat = 0;
+
+        files.each(function(){
+            if ($(this).attr("seleccionat") == "1")
+                algunSeleccionat = 1;
+        });
+        if (!algunSeleccionat)
+            accionsGeneral.removeClass("visible");
+    }
+
+    function exportaRegistres(context, general = false) {
+        var aquest = $(context),
+            registre = [],
+            vregistre = [],
+            textRegistres="";
+
+        if(!general)
+            aquest.each(function(){registre.push($(this).parent().parent().find("td"));});
+        else 
+            registre = aquest;
+
+        registre = $(registre);
+        registre.each(function(index){
+            if (!general) {
+                var reg = $(this).toArray();
+            } else {
+                var reg = $(this).children();
+            }
+            reg = $.grep(reg, function(r){ return !$(r).hasClass("accions"); });
+            reg = $(reg);
+            vregistre[index] = [];
+            reg.each(function(){
+                return vregistre[index].push($(this).text().trim());
+            });
+        });
+        vregistre = $(vregistre);
+        vregistre.each(function(){
+            textRegistres += "["+$(this)[0]+"]\n"+$(this)[1]+"->"+$(this)[2]+" = "+$(this)[3]+";"+$(this)[4]+"; "+$(this)[5]+"; "+$(this)[6]+".\n";
+        });
+        return textRegistres;
+    }
 });

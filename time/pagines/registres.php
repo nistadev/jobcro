@@ -1,6 +1,6 @@
 <div id="taula-registres">
     <div class="table-respodnsive">
-        <table class="table table-hover">
+        <table class="table table-hover" id="registres">
             <thead>
                 <tr>
                     <th class="col-xs-12 col-sm-12 col-md-1 col-lg-1">Data</th>
@@ -17,8 +17,8 @@
     <?php   $query = "SELECT * FROM work_done ORDER BY data DESC, hora_inicial DESC";
             $result = $conn->query($query);
             while($row = $result->fetch_array(MYSQLI_ASSOC)){ ?>
-                    <tr data-id="<?php echo $row['id']; ?>">
-                        <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data">
+                    <tr data-id="<?php echo $row['id']; ?>" seleccionat="0">
+                        <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data <?php if(!is_null($row['nuvol'])) echo 'al-nuvol';?>">
                             <?php echo date("d/m/y", strtotime($row["data"])); ?>
                         </td>
                         <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_inicial">
@@ -40,21 +40,38 @@
                             <?php echo $row["descripcio"]; ?>
                         </td>
                         <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 accions">
-                            <span id="eliminar-registre" class="glyphicon glyphicon-remove" title="Elimina registre"></span>
-                            <span id="editar-registre" class="glyphicon glyphicon-pencil" title="Edita registre"></span>
-                            <span id="copia-registre" class="glyphicon glyphicon-duplicate" title="Copia registre"></span>
-                            <span id="enviar-registre" class="glyphicon glyphicon-share-alt" title="Envia i elimina"></span>
-                        </td>
-                        <div class="enviar-registre-opcions">
-                            <div class="opcions">
-                                <span class="glyphicon glyphicon-list-alt excel"></span>
-                                <span class="glyphicon glyphicon-envelope mail"></span>
+                            <span id="eliminar-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-remove eliminar-registre" title="Elimina registre"></span>
+                            <span id="editar-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-pencil editar-registre" title="Edita registre"></span>
+                            <span id="copia-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-duplicate copia-registre" title="Copia registre"></span>
+                            <span id="enviar-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-share-alt enviar-registre" title="Envia i elimina"></span>
+                            <span id="seleccionar-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-unchecked seleccionar-registre" title="Seleccionar registre"></span>
+                            <div class="enviar-registre-opcions">
+                                <div class="opcions">
+                                    <span class="glyphicon glyphicon-list-alt excel"></span>
+                                    <span class="glyphicon glyphicon-envelope mail"></span>
+                                    <span class="glyphicon glyphicon-save-file fitxer"></span>
+                                </div>
                             </div>
-                        </div>
+                        </td>
                     </tr>
             <?php } ?>
             </tbody>
         </table>
+        <div id="accionsGeneral">
+            <div class="opcions">
+                <span id="eliminar-registres" class="glyphicon glyphicon-remove" title="Elimina registres"></span>
+                <span id="copia-registres" class="glyphicon glyphicon-duplicate" title="Copia registres"></span>
+                <span id="enviar-registres" class="glyphicon glyphicon-share-alt" title="Envia i elimina"></span>
+                <span id="seleccionar-registres" class="glyphicon glyphicon-unchecked" title="Seleccionar registres"></span>
+                <div class="enviar-registres-opcions">
+                    <div class="opcions">
+                        <span class="glyphicon glyphicon-list-alt excel"></span>
+                        <span class="glyphicon glyphicon-envelope mail"></span>
+                        <span class="glyphicon glyphicon-save-file fitxer"></span>
+                    </div>
+                </div>
+            </div>
+        <div>
     </div>
 </div>
 <script src="js/accionsregistres.js"></script>

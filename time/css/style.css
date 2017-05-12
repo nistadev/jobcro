@@ -1,6 +1,9 @@
 body{
     font-size: 14px;
 }
+span.glyphicon {
+    cursor: pointer;
+}
 #formulari-hores {
     max-width: 600px;
     margin: 0 auto;
@@ -15,28 +18,26 @@ body{
 #taula-registres {
     max-width: 1280px;
     margin: 0 auto;
+    position: relative;
 }
 
 #taula-registres tr .form-control:not(input) {
-	padding: 6px 0;
+    padding: 6px 0;
 }
 #taula-registres tr input {
-	padding: 6px 5px;
-}
-.accions span{
-    cursor: pointer;
+    padding: 6px 5px;
 }
 
 #footer {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
 }
 .footer-content{
-	text-align: center;
-	padding: 10px;
+    text-align: center;
+    padding: 10px;
 }
 
 #formulari-hores #camp-hora-inici{
@@ -44,19 +45,19 @@ body{
 }
 
 #formulari-hores #camp-hora-fi{
-	
+    
 }
 
 #formulari-hores #camp-client{
-	
+    
 }
 
 #formulari-hores #camp-descripcio{
-	
+    
 }
 
 #formulari-hores #camp-boto-formulari{
-	margin-top: 25px;
+    margin-top: 25px;
 }
 #formulari-hores #missatge-error{
     margin-top: 20px;
@@ -65,37 +66,51 @@ body{
     color: red;
 }
 
-#taula-registres tbody.loading tr{
-	display: none;
-}
-
 .loading:after {
-	content: "";
-	background-image: url("../img/loader.gif");
-	background-position: center;
-	background-size: 250%;
-	width: 50px;
-	height: 50px;
-	display: block;
+    content: "";
+    background-image: url("../img/loader.gif");
+    background-position: center;
+    background-size: 250%;
+    width: 50px;
+    height: 50px;
+    display: block;
 }
 
+#taula-registres tbody.loading tr{
+    display: none;
+}
+#taula-registres tr[seleccionat="1"]{
+    background-color: #f5f5f5;
+    border: 1px double #111;
+    border-left: 3px solid #000;
+    border-right: 2px solid #000;
+    margin-top: 5px;
+}
 
+#taula-registres td{
+    position: relative;
+}
 .enviar-registre-opcions{
     position: relative;
-    width: 0;
+    width: 100%;
     height: 0;
     font-size: 1.3em;
+    display: none;
+}
+.enviar-registre-opcions.visible{
+    display: block;
 }
 
 .enviar-registre-opcions .opcions {
     position: absolute;
     background: #fff;
     top: 5px;
-    left: -7px;
+    right: 20px;
     border: 1px solid #aaa;
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
+    z-index: 5;
 }
 .enviar-registre-opcions .opcions:after {
     bottom: 100%;
@@ -119,3 +134,72 @@ body{
     background-color: #aaa;
 }
 
+
+#accionsGeneral{
+    position: relative;
+    width: 100%;
+    height: 0;
+    font-size: 1.3em;
+    display: none;
+    text-align: right;
+}
+#accionsGeneral.visible{
+    display: block;
+}
+
+#accionsGeneral .opcions {
+    position: absolute;
+    background: #fff;
+    top: 5px;
+    right: 0;
+    border: 1px solid #aaa;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    z-index: 5;
+}
+#accionsGeneral .opcions:after {
+    bottom: 100%;
+    right: 10px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(79, 213, 64, 0);
+    border-bottom-color: #aaa;
+    border-width: 10px;
+}
+
+#accionsGeneral .opcions span{
+    padding: 10px;
+    top: 0;
+}
+#accionsGeneral .opcions span:hover{
+    background-color: #aaa;
+}
+
+.enviar-registres-opcions{
+    display: none;
+}
+
+.al-nuvol {
+}
+
+.al-nuvol:before{
+    content: "\2601";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    left: -20px;
+    top: 12px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    z-index: 2;
+}

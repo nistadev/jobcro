@@ -376,7 +376,7 @@ $(document).ready(function(){
         });
         vregistre = $(vregistre);
         vregistre.each(function(){
-            textRegistres += "["+$(this)[0]+"]\n"+$(this)[1]+"->"+$(this)[2]+" = "+$(this)[3]+";"+$(this)[4]+"; "+$(this)[5]+"; "+$(this)[6]+".\n";
+            textRegistres += "["+$(this)[0]+"]\n"+$(this)[1]+"->"+$(this)[2]+" = "+$(this)[3]+"; "+$(this)[4]+"; "+$(this)[5]+"; "+$(this)[6]+".\n";
         });
         return textRegistres;
     }

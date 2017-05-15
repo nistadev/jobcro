@@ -15,9 +15,17 @@
             include("pagines/importador.php");
         elseif ($page == "inici")
             include("pagines/inici.php");
+        else {
+            echo "<h1 class='text-center'>404 Not Found</h1>";
+            echo "<div class='text-center'>La pagina <strong>".$page."</strong> no ha estat trobada</div>"; 
+        }
 
     } else {
-        echo "<h1>Error 404: Pagina no trobada</h1>";
+        if (isset($page)) {
+            header("location: index.php?page=404");
+        } else {
+            header("location: index.php?page=inici");
+        }
     } ?>
 
     </main>

@@ -17,21 +17,7 @@
                     <th class="col-xs-12 col-sm-12 col-md-1 col-lg-1">Accions</th>
                 </tr>
             </thead>
-            <tbody>
-		    	<tr>
-		            <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data"></td>
-		            <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_inicial"></td>
-		            <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_final"></td>
-		            <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-temps_total"></td>
-		            <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-client"></td>
-		            <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-concepte"></td>
-		            <td class="col-xs-12 col-sm-12 col-md-3 col-lg-3 camp-descripcio"></td>
-		            <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 accions">
-		                <span id="registre-valid" class="glyphicon glyphicon-ok" title="Registre valid"></span>
-		                <span id="registre-novalid" class="glyphicon glyphicon-remove" title="Registre invalid"></span>
-		            </td>
-		        </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 </div>

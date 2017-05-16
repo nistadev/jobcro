@@ -375,8 +375,15 @@ $(document).ready(function(){
             });
         });
         vregistre = $(vregistre);
-        vregistre.each(function(){
-            textRegistres += "["+$(this)[0]+"]\n"+$(this)[1]+"->"+$(this)[2]+" = "+$(this)[3]+"; "+$(this)[4]+"; "+$(this)[5]+"; "+$(this)[6]+".\n";
+        vregistre.each(function(index){
+            //textRegistres += "["+$(this)[0]+"]\n"+$(this)[1]+"->"+$(this)[2]+" = "+$(this)[3]+"; "+$(this)[4]+"; "+$(this)[5]+"; "+$(this)[6]+".\n";
+            if (index == 0)
+                textRegistres = "[\n";
+            if (index != vregistre.length - 1) {
+                textRegistres += '\t{\n\t\t"data" : "'+$(this)[0]+'",\n\t\t"hora_inici" : "'+$(this)[1]+'",\n\t\t"hora_fi" : "'+$(this)[2]+'",\n\t\t"temps_total" : "'+$(this)[3]+'",\n\t\t"client" : "'+$(this)[4]+'",\n\t\t"concepte" : "'+$(this)[5]+'",\n\t\t"descripcio" : "'+$(this)[6]+'"\n\t},\n';
+            } else {
+                textRegistres += '\t{\n\t\t"data" : "'+$(this)[0]+'",\n\t\t"hora_inici" : "'+$(this)[1]+'",\n\t\t"hora_fi" : "'+$(this)[2]+'",\n\t\t"temps_total" : "'+$(this)[3]+'",\n\t\t"client" : "'+$(this)[4]+'",\n\t\t"concepte" : "'+$(this)[5]+'",\n\t\t"descripcio" : "'+$(this)[6]+'"\n\t}\n]';
+            }
         });
         return textRegistres;
     }

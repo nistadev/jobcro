@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </div>
-        <div>
+        </div>
     </div>
 </div>
 <script src="js/accionsregistres.js"></script>

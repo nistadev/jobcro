@@ -7,10 +7,10 @@ $(document).ready(function(){
         accionsGeneral = $("#accionsGeneral");
 
     botoImportar.click(function(){
-        var inputUsuari = aImportar.val();
+        inputUsuari = aImportar.val();
         try{
-            var registres = JSON.parse(inputUsuari);
-            validaRegistre(registres);
+            registres = JSON.parse(inputUsuari);
+            pintaRegistrePerValidar(registres);
         } catch (error) {
             alert("Error al importar el registre, format no compatible.");
             console.log(error);
@@ -19,9 +19,8 @@ $(document).ready(function(){
         actualitzaAccions();
     });
 
-    function validaRegistre(reg){
+    function pintaRegistrePerValidar(reg){
         registreImportat.show();
-        console.log(reg);
         for(var i = 0; i < reg.length; i++){
             registreImportat.append(`
             <tr>
@@ -43,36 +42,45 @@ $(document).ready(function(){
         aImportar.html("");
     }
 
-    formulari.submit(function(e){
-        e.preventDefault();
-
-        $.ajax("accions.php", {
-            action: 'POST',
-            data: "hola",
-            succes: function(resposta){
-                escriuText(resposta);
-            },
-            error: function(resposta){
-                escriuText(resposta);
-            }
+    function validaRegistre(dades) {
+        console.log(dades);
+        $.post("accions.php", {
+            data: JSON.stringify(dades)
+        }).done(function(resposta){
+            escriuText(resposta);
         });
-    });
+    }
 
+    function escriuText(r){
+        console.log(r);
+    }
     function actualitzaAccions(){
         accions = $(".accions");
-        console.log(accions);
         accions.on('click', '.registre-valid', function(){
+            var regsValids = [[]];
+            var regActual = $(this).parent().parent().children();
+
+            regActual = $($.grep(regActual, function(r){return !$(r).hasClass("accions");}));
+            
+            regActual.each(function(i, r){
+                var prova = $(r).text().trim();
+                console.log(prova.replace("\\[/]\/g",""));
+                return regsValids[0].push(prova);
+            });
+
+            validaRegistre(regsValids);
+
             $(this).parent().parent().fadeOut().remove();
-            comprovaSeleccionades();
+            //comprovaSeleccionades();
         });
 
         accions.on('click', '.registre-novalid', function(){
             $(this).parent().parent().fadeOut().remove();
-            comprovaSeleccionades();
+            //comprovaSeleccionades();
         });
-
+    }
         /*** seleccionar registre ***/
-        accions.on('click', '.seleccionar-registre', function(){
+        /*accions.on('click', '.seleccionar-registre', function(){
             var check = $(this),
                 filaPare = $(this).parent().parent();
 
@@ -87,10 +95,10 @@ $(document).ready(function(){
                 comprovaSeleccionades();
             }
 
-        });
+        });*/
 
         /*** seleccionar tots registres ***/
-        accionsGeneral.on('click', '#seleccionar-registres', function(){
+        /*accionsGeneral.on('click', '#seleccionar-registres', function(){
             var registres = $("#taula-registres tbody tr"),
                 checks = $(".seleccionar-registre"),
                 totsSeleccionats = 0,
@@ -135,5 +143,5 @@ $(document).ready(function(){
         });
         if (!algunSeleccionat)
             accionsGeneral.removeClass("visible");
-    }
+    }*/
 });

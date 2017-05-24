@@ -7,7 +7,65 @@ $(document).ready(function(){
         vconcepte, 
         vdescripcio,
         accions = $(".accions"),
-        accionsGeneral = $("#accionsGeneral");
+        accionsGeneral = $("#accionsGeneral"),
+        cosTaula = $("#taula-registres tbody"),
+        totsRegistres;
+
+
+
+    /*
+     * ORDENACIONS I FILTRES
+     */
+
+    function getRegistres(){
+        $.ajax({
+            url: 'accions.php',
+            type: 'GET',
+            data: 'registres',
+            success: function(data){
+                totsRegistres = JSON.parse(data);
+                console.log(totsRegistres);
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    }
+
+    function pintaRegistres(){
+        for (var i = 0; i < totsRegistres["data"].length; i++) {
+            cosTaula.append(`
+                <tr data-id="`+$totsRegistres["data"][i]['id']+`" seleccionat="0">
+                    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data">
+                        `+$totsRegistres["data"][i]["data"]+`
+                    </td>
+                    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_inicial">
+                        `+$totsRegistres["data"][i]["hora_inicial"]+`
+                    </td>
+                    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_final">
+                        `+$totsRegistres["data"][i]["hora_final"]+`
+                    </td>
+                    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-temps_total">
+                        `+(parseInt($totsRegistres["data"][i]["hora_final"]) - parseInt($totsRegistres["data"][i]["hora_inicial"]) / 3600) +`
+                    </td>
+                    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-client">
+                        `+$totsRegistres["data"][i]["client"]+`
+                    </td>
+                    <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-concepte">
+                        `+$totsRegistres["data"][i]["concepte"]+`
+                    </td>
+                    <td class="col-xs-12 col-sm-12 col-md-3 col-lg-3 camp-descripcio">
+                        `+$totsRegistres["data"][i]["descripcio"]+`
+                    </td>
+                    
+                </tr>
+            `);
+        }
+    }
+
+    getRegistres().then(function(){
+        pintaRegistres();
+    });
 
     /*
      * ACCIONS UN SOL REGISTRE
@@ -243,26 +301,33 @@ $(document).ready(function(){
      */
 
     /*** eliminar registres seleccionats ***/
-    /*accionsGeneral.on('click', '#eliminar-registres', function(){
-        var accioClicada = this;
-        var idRegistre = $(this).parent().parent().data("id");
-        var confirmacio = confirm("Estas segur de que vols eliminar el registre?");
+    accionsGeneral.on('click', '#eliminar-registres', function(){
+        var accioClicada = this,
+            registres = $("#registres tbody tr[seleccionat='1']")
+            idRegistres = [];
+
+        registres.each(function(){
+            idRegistres.push($(this).data("id"));
+        });
+
+
+        var confirmacio = confirm("Estas segur de que vols eliminar els registres?");
         if(confirmacio){
             $.ajax({
-                url: 'accions.php?id=' + idRegistre,
+                url: 'accions.php?data=' + idRegistres + "",
                 type: 'DELETE',
-                context: accioClicada,
                 success: function(data){
-                    console.log(data);
-                    return $(this).parent().parent().fadeOut("slow");
+                    registres.fadeOut("slow");
+                    registres.remove();
+                    comprovaSeleccionades();
                 },
                 error: function(data){
-                    console.log("Error");
+                    console.log("Error al eliminar en massa.");
                 }
             });
         }
 
-    });*/
+    });
 
     /*** copiar registres seleccionats ***/
     accionsGeneral.on('click', '#copia-registres', function(){

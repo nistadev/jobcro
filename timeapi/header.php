@@ -26,6 +26,11 @@
                 <a href="index.php?page=importar">Importar</a>
             </li>
         </ul>
+        <ul class="nav navbar-nav text-right">
+            <li>
+                <a href="index.php?page=configuracions"><span class="glyphicon glyphicon-cog"></span></a>
+            </li>
+        </ul>
     </div>
 </nav>
 <body>

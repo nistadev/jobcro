@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { HeroesComponent } from './heroes/heroes.component';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 import { HeroService } from './hero.service';
+import { RegistreService } from './registre.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -18,7 +19,7 @@ import { AppRoutingModule } from './app-routing.module';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [HeroService],
+  providers: [HeroService, RegistreService],
   declarations: [
   	AppComponent, 
   	HeroDetailComponent, 

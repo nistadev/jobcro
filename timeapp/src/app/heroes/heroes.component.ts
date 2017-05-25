@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from '../hero';
+import { Registre } from '../registre';
 import { HeroService } from '../hero.service';
+import { RegistreService } from '../registre.service';
 
 
 @Component({
@@ -12,16 +14,23 @@ import { HeroService } from '../hero.service';
 export class HeroesComponent implements OnInit {
   heroes: Hero[];
   selectedHero: Hero;
+  registres: Registre[];
   constructor(
     //private router: Router,
-    private heroService: HeroService) { }
+    private heroService: HeroService,
+    private regService: RegistreService) { }
 
   getHeroes(): void {
     this.heroService.getHeroes().then(heroes => this.heroes = heroes);
   }
 
+  getRegistres(): void {
+    this.regService.getRegistres().then(registres => this.registres = registres);
+  }
+
   ngOnInit(): void {
     this.getHeroes();
+    this.getRegistres();
   }
 
   onSelect(hero: Hero): void {

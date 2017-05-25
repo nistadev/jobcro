@@ -12,3 +12,9 @@
   </h2>
   <button (click)="gotoDetail()">View Details</button>
 </div>
+<h2>My Registres</h2>
+<ul class="heroes">
+    <li *ngFor="let reg of registres">
+        <span class="badge">{{reg.id}}</span> {{reg.data}}
+    </li>
+</ul>

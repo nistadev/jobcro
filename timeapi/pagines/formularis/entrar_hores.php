@@ -11,6 +11,13 @@
             <label for="hora_fi">Hora Fi</label><br/>
             <input type="time" step="900" value="09:30" name="hora_fi" id="hora_fi" class="form-control">
         </div>
+        <div id="camp-tipus-hora" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <label for="tipus">Tipus</label><br>
+            <select name="tipus" id="tipus" class="form-control">
+                <option value="r">Remot</option>
+                <option value="p">Presencial</option>
+            </select>
+        </div>
         <div id="camp-client" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <label for="client">Client</label><br>
             <input type="text" name="client" id="client" class="form-control">
@@ -19,7 +26,7 @@
             <label for="conc">Concepte</label><br>
             <input type="text" name="conc" id="conc" class="form-control">
         </div>
-        <div id="camp-descripcio" class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+        <div id="camp-descripcio" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <label for="descripcio">Descripcio</label><br>
             <input type="text" name="descripcio" id="descripcio" class="form-control">
         </div>

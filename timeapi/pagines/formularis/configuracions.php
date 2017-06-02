@@ -18,7 +18,4 @@
         <button id="boto-formulari" type="submit" class="btn btn-default">Entrar Hora</button>
     </div>
 </form>
-<form action="#" id="">
-    
-</form>
 <script src="js/configuracions.js"></script>

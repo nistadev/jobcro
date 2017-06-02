@@ -1,0 +1,16 @@
+{% if ultimes_preguntes %}
+	<div class="pregunta" >
+	{% for p in ultimes_preguntes %}
+		<a href="{% url 'polls:detalls' p.id %}" style="color: #000; text-decoration: none;">
+			<span style="font-size: 1.2em; font-weight: bold;">{{p.txt_preg}}</span>
+			<span style="font-style: italic; padding-left: 5px;">
+				<small>{{p.data_publicacio}}</small>
+			</span>
+		</a>
+	{% endfor %}
+	</div>
+{% else %}
+	<div class="no-preguntes">
+		<h2>No hi han preguntes disponibles per votar.</h2>
+	</div>
+{% endif %}

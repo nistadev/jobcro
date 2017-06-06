@@ -17,7 +17,7 @@ $(document).ready(function(){
      * ORDENACIONS I FILTRES
      */
 
-    function getRegistres(){
+    /*function getRegistres(){
         $.ajax({
             url: 'accions.php',
             type: 'GET',
@@ -65,7 +65,7 @@ $(document).ready(function(){
 
     getRegistres().then(function(){
         pintaRegistres();
-    });
+    });*/
 
     /*
      * ACCIONS UN SOL REGISTRE

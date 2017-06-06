@@ -1,5 +1,7 @@
 <?php
 
+header('Access-Control-Allow-Methods: GET, POST, DELETE');
+header("access-control-allow-origin: *");
 include("connection.php");
 
 $accio = $_SERVER['REQUEST_METHOD'];
@@ -62,7 +64,7 @@ if ($accio == 'DELETE'){
   }
 } elseif ($accio = "GET") {
   if (isset($_GET["registres"])) {
-    $qry = "SELECT * FROM work_done";
+    $qry = "SELECT * FROM work_done ORDER BY data DESC, hora_inicial ASC";
     $res = $conn->query($qry);
     $result = array();
     $result["data"] = array();

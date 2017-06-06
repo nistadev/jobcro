@@ -28,6 +28,16 @@ export class HeroesComponent implements OnInit {
     this.regService.getRegistres().then(registres => this.registres = registres);
   }
 
+  delRegistre(idReg, reg): void {
+    let confirma = confirm("Estas segur de voler eliminar?");
+    if (confirma) {
+      //this.regService.deleteRegistre(idReg);
+      this.registres[this.registres.indexOf(reg)] = undefined;
+    } else {
+      this.regService.updateRegistre(reg);
+    }
+  }
+
   ngOnInit(): void {
     this.getHeroes();
     this.getRegistres();

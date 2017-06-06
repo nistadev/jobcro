@@ -14,7 +14,9 @@
 </div>
 <h2>My Registres</h2>
 <ul class="heroes">
-    <li *ngFor="let reg of registres">
-        <span class="badge">{{reg.id}}</span> {{reg.data}}
+    <li *ngFor="let reg of registres" >
+        <div (click)="delRegistre(reg.id, reg)">
+            <span class="badge">{{reg.id}}</span> {{reg.data}}
+        </div>
     </li>
 </ul>

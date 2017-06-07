@@ -26,6 +26,9 @@ create table client (
     preu_hora_p decimal(3,2);
 );
 
-create table empresa (
+create table usuari (
+    id int,
+    nom varchar(15),
+    cognom varchar(20),
     
 );

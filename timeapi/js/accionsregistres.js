@@ -22,7 +22,7 @@ $(document).ready(function(){
      * ORDENACIONS I FILTRES
      */
 
-    function getRegistres(){
+    /*function getRegistres(){
         $.ajax({
             url: 'accions.php',
             type: 'GET',
@@ -87,6 +87,7 @@ $(document).ready(function(){
                     </td>
                 </tr>
             `);
+<<<<<<< HEAD
             accions = $(".accions");
             /*
              * ACCIONS UN SOL REGISTRE
@@ -111,6 +112,14 @@ $(document).ready(function(){
                         }
                     });
                 }
+=======
+        }
+    }
+
+    getRegistres().then(function(){
+        pintaRegistres();
+    });*/
+>>>>>>> e9fdec7518d744ea38f7b8bcbd64d83ead417a08
 
             });
 

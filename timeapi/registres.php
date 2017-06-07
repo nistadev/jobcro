@@ -2,7 +2,10 @@
 header('content-type: application/json; charset=utf-8');
 header("access-control-allow-origin: *");
 
+$accio = $_SERVER['REQUEST_METHOD'];
+
 include("connection.php");
+<<<<<<< HEAD
 <<<<<<< HEAD
 $accio = $_SERVER['REQUEST_METHOD'];
 
@@ -12,6 +15,9 @@ if ($accio = 'GET') {
 	$registres = array();
 	$registres["registres"] = array();
 =======
+=======
+
+>>>>>>> e9fdec7518d744ea38f7b8bcbd64d83ead417a08
 $query = "SELECT * FROM work_done";
 $result = $conn->query($query);
 $registres = array();
@@ -28,4 +34,5 @@ while($row = $result->fetch_array(MYSQLI_ASSOC))
 }
 
 $conn->close();
+
 ?>

@@ -1,5 +1,7 @@
 <?php
 
+header('Access-Control-Allow-Methods: GET, POST, DELETE');
+header("access-control-allow-origin: *");
 include("connection.php");
 
 $accio = $_SERVER['REQUEST_METHOD'];

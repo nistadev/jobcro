@@ -1,0 +1,1 @@
+<h2>Preferències i configuracions</h2>

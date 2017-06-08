@@ -12,10 +12,25 @@ main{
     margin: 0 auto;
     text-align: left;
 }
+#formulari-hores .row{
+    margin-bottom: 15px;
+}
 #formulari-importacio {
-    max-width: 600px;
+    max-width: 1280px;
     margin: 0 auto;
     text-align: left;
+}
+#formulari-importacio textarea{
+    width: 93%;
+    height: 75px;
+}
+
+#formulari-importacio button {
+    margin-left: 5px;
+}
+
+#formulari-importacio form {
+    margin-bottom: 30px;
 }
 
 #taula-registres {
@@ -93,49 +108,6 @@ main{
 #taula-registres td{
     position: relative;
 }
-.enviar-registre-opcions{
-    position: relative;
-    width: 100%;
-    height: 0;
-    font-size: 1.3em;
-    display: none;
-}
-.enviar-registre-opcions.visible{
-    display: block;
-}
-
-.enviar-registre-opcions .opcions {
-    position: absolute;
-    background: #fff;
-    top: 5px;
-    right: 20px;
-    border: 1px solid #aaa;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-around;
-    z-index: 5;
-}
-.enviar-registre-opcions .opcions:after {
-    bottom: 100%;
-    right: -1px;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(79, 213, 64, 0);
-    border-bottom-color: #aaa;
-    border-width: 10px;
-}
-
-.enviar-registre-opcions .opcions span{
-    padding: 10px;
-    top: 0;
-}
-.enviar-registre-opcions .opcions span:hover{
-    background-color: #aaa;
-}
 
 
 #accionsGeneral{
@@ -151,10 +123,10 @@ main{
 }
 
 #accionsGeneral .opcions {
-    position: absolute;
+    position: fixed;
     background: #fff;
-    top: 5px;
-    right: 0;
+    bottom: 15px;
+    right: 6%;
     border: 1px solid #aaa;
     display: flex;
     align-items: flex-start;
@@ -185,8 +157,29 @@ main{
 
 .enviar-registres-opcions{
     display: none;
+    position: fixed;
+    bottom: 15px;
 }
 
+.opcions-registres {
+    background: #fff;
+    border: 1px solid #aaa;
+    position: relative;
+    vertical-align: top;
+}
+
+.enviar-registres-opcions.visible{
+    display: block;
+    vertical-align: top;
+}
+.opcions-registres:after {
+    content: "";
+    position: absolute;
+    right: -26px;
+    bottom: 10px;
+    height: 10px;
+    background-color: #000;
+}
 .al-nuvol {
 }
 
@@ -205,4 +198,12 @@ main{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     z-index: 2;
+}
+#taula-registres .table-responsive {
+    overflow: visible;
+}
+@media screen and (max-width: 768px){
+    #taula-registres .table-responsive {
+        overflow-x: auto;
+    }
 }

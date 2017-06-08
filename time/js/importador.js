@@ -4,7 +4,8 @@ $(document).ready(function(){
         registreImportat = $("#taula-registres > table > tbody"),
         formulari = $("#form-import"),
         accions = $(".accions"),
-        accionsGeneral = $("#accionsGeneral");
+        accionsGeneral = $("#accionsGeneral"),
+        fitxerJSON = $('#fitxer-json');
 
     botoImportar.click(function(){
         inputUsuari = aImportar.val();
@@ -17,6 +18,7 @@ $(document).ready(function(){
         }
         $("#textImportar").val("");
         actualitzaAccions();
+        document.getElementById('fitxer-json').value = "";
     });
 
     function pintaRegistrePerValidar(reg){
@@ -34,7 +36,7 @@ $(document).ready(function(){
                 <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 accions">
                     <span class="glyphicon glyphicon-ok registre-valid" title="Registre valid"></span>
                     <span class="glyphicon glyphicon-remove registre-novalid" title="Registre invalid"></span>
-                    <span class="glyphicon glyphicon-unchecked seleccionar-registre" title="Seleccionar registre"></span>
+                    <!-- <span class="glyphicon glyphicon-unchecked seleccionar-registre" title="Seleccionar registre"></span> -->
                 </td>
             </tr>
             `);
@@ -43,7 +45,6 @@ $(document).ready(function(){
     }
 
     function validaRegistre(dades) {
-        console.log(dades);
         $.post("accions.php", {
             data: JSON.stringify(dades)
         }).done(function(resposta){
@@ -64,7 +65,7 @@ $(document).ready(function(){
             
             regActual.each(function(i, r){
                 var prova = $(r).text().trim();
-                console.log(prova.replace("\\[/]\/g",""));
+                //console.log(prova.replace("\\[/]\/g",""));
                 return regsValids[0].push(prova);
             });
 
@@ -144,4 +145,21 @@ $(document).ready(function(){
         if (!algunSeleccionat)
             accionsGeneral.removeClass("visible");
     }*/
+    function triaDeFitxer(evt) {
+        var files = evt.target.files; // FileList object
+        var reader = new FileReader();
+        var f = files[0];
+        var fitxerJSON = $('#fitxer-json');
+
+        reader.onload = (function(theFile) {
+            return function(e) {
+                var span = document.createElement('span');
+                $('#textImportar').val(e.target.result);
+                document.getElementById('taula-registres').insertBefore(span, null);
+            };
+        })(f);
+        reader.readAsText(f);
+    }
+
+    document.getElementById('fitxer-json').addEventListener('change', triaDeFitxer, false);
 });

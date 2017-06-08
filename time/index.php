@@ -15,6 +15,10 @@
             include("pagines/importador.php");
         elseif ($page == "inici")
             include("pagines/inici.php");
+        elseif ($page == "horari")
+            echo "<h2>Apartat en desenvolupament</h2>";
+        elseif ($page == "configuracions")
+            include("pagines/formularis/configuracions.php");
         else {
             echo "<h1 class='text-center'>404 Not Found</h1>";
             echo "<div class='text-center'>La pagina <strong>".$page."</strong> no ha estat trobada</div>"; 

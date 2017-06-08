@@ -1,9 +1,12 @@
 <div id="formulari-importacio">
     <form class="form-inline" id="form-import">
-        <textarea name="textImportar" id="textImportar" class="form-control" placeholder="[registre a importar]"></textarea>
+        <h4>Selecciona un fitxer</h4>
+        <input type="file" name="fitxer" accept=".json" id="fitxer-json" />
+        <h4>o introdueix un registre</h4>
+        <textarea name="textImportar" id="textImportar" class="form-control" placeholder="Introdueix registre (format JSON)"></textarea>
         <button type="button" class="btn btn-info " id="importa">Importar</button>
     </form>
-    <div id="taula-registres">
+    <div id="taula-registres" class="table-responsive">
     	<table class="table table-hover" id="registres">
             <thead>
                 <tr>

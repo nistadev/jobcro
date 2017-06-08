@@ -206,15 +206,6 @@ $(document).ready(function(){
         copiaRegistre();
     });
 
-    /*** enviar registre ***/
-    accions.on('click', '.enviar-registre', function(){
-        var caixa = $(this).parent().find(".enviar-registre-opcions");
-        if (!caixa.hasClass("visible"))
-            caixa.addClass("visible");
-        else
-            caixa.removeClass("visible");
-    });
-
     /*** seleccionar registre ***/
     accions.on('click', '.seleccionar-registre', function(){
         var check = $(this),
@@ -243,31 +234,37 @@ $(document).ready(function(){
      */
 
     /*** eliminar registres seleccionats ***/
-    /*accionsGeneral.on('click', '#eliminar-registres', function(){
-        var accioClicada = this;
-        var idRegistre = $(this).parent().parent().data("id");
-        var confirmacio = confirm("Estas segur de que vols eliminar el registre?");
+    accionsGeneral.on('click', '#eliminar-registres', function(){
+        var accioClicada = this,
+            registres = $("#registres tbody tr[seleccionat='1']")
+            idRegistres = [];
+
+        registres.each(function(){
+            idRegistres.push($(this).data("id"));
+        });
+
+
+        var confirmacio = confirm("Estas segur de que vols eliminar els registres?");
         if(confirmacio){
             $.ajax({
-                url: 'accions.php?id=' + idRegistre,
+                url: 'accions.php?data=' + idRegistres + "",
                 type: 'DELETE',
-                context: accioClicada,
                 success: function(data){
-                    console.log(data);
-                    return $(this).parent().parent().fadeOut("slow");
+                    registres.fadeOut("slow");
+                    registres.remove();
+                    comprovaSeleccionades();
                 },
                 error: function(data){
-                    console.log("Error");
+                    console.log("Error al eliminar en massa.");
                 }
             });
         }
 
-    });*/
+    });
 
     /*** copiar registres seleccionats ***/
     accionsGeneral.on('click', '#copia-registres', function(){
-        var aquest = this,
-            registreFormatat;
+        var registreFormatat;
 
         var registres = $("#registres tbody tr[seleccionat='1']");
         registreFormatat = exportaRegistres(registres, true);
@@ -293,13 +290,22 @@ $(document).ready(function(){
     });
 
     /*** enviar registres seleccionats ***/
-    /*accionsGeneral.on('click', '#enviar-registres', function(){
+    accionsGeneral.on('click', '#enviar-registres', function(){
         var caixa = $(this).parent().find(".enviar-registres-opcions");
         if (!caixa.hasClass("visible"))
             caixa.addClass("visible");
         else
             caixa.removeClass("visible");
-    });*/
+    });
+
+    /*** enviar registre ***/
+    accions.on('click', '.enviar-registre', function(){
+        var caixa = $(this).parent().find(".enviar-registre-opcions");
+        if (!caixa.hasClass("visible"))
+            caixa.addClass("visible");
+        else
+            caixa.removeClass("visible");
+    });
 
     /*** seleccionar tots registres ***/
     accionsGeneral.on('click', '#seleccionar-registres', function(){
@@ -324,11 +330,91 @@ $(document).ready(function(){
         comprovaSeleccionades();
     });
 
-    accionsGeneral.on('click', '.opcions .mail', function(){
+    accionsGeneral.on('click', '.opcions-registres .mail', function(){
         console.log("mail");
     });
 
+    accionsGeneral.on('click', '.opcions-registres .excel', function(){
+        var registresFormatats,
+            regs = $("#registres tbody tr[seleccionat='1']");
 
+        registresFormatats = exportaRegistres(regs, true, true);
+
+        exportaCSV(registresFormatats, "prova");
+
+        function exportaCSV(regs, titolFitxer) {
+            var caixaCompartir = $(this).parent().parent();
+            var titol = titolFitxer + '.csv' || 'registres.csv';
+            var csv = converteixRegistresACSV(regs);
+            var fitxer = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+            if (navigator.msSaveBlob) { // IE 10+
+                navigator.msSaveBlob(fitxer, titol);
+            } else {
+                var enllas = document.createElement("a");
+                if (enllas.download !== undefined) {
+                    var url = URL.createObjectURL(fitxer);
+                    enllas.setAttribute("href", url);
+                    enllas.setAttribute("download", titol);
+                    enllas.style.visibility = 'hidden';
+                    document.body.appendChild(enllas);
+                    enllas.click();
+                    document.body.removeChild(enllas);
+                }
+            }
+            caixaCompartir.removeClass("visible");
+
+        }
+        function converteixRegistresACSV(regs) {
+            var regsCSV = '';
+            for(var i = 0; i <= regs.length-1; i++){
+                var data = regs[i]["data"].split("/");
+                data = data[1]+"/"+data[0]+"/20"+data[2];
+                regsCSV += "patri,,,"+data+','+parseFloat(regs[i]["temps_total"])+','+regs[i]["client"]+','+regs[i]["concepte"]+','+regs[i]["descripcio"]+','+'\r\n';
+            }
+            
+            return regsCSV;
+        }
+    });
+
+    accionsGeneral.on('click', '.opcions-registres .fitxer', function(){
+        var registresFormatats,
+            regs = $("#registres tbody tr[seleccionat='1']");
+
+        registresFormatats = exportaRegistres(regs, true);
+
+        exportaFitxer(registresFormatats, "registres");
+
+        function exportaFitxer(regs, titolFitxer) {
+            var caixaCompartir = $(this).parent().parent();
+            var titol = titolFitxer + '.json' || 'registres.json';
+            var fitxer = new Blob([regs], { type: 'application/json;charset=utf-8;' });
+
+            if (navigator.msSaveBlob) { // IE 10+
+                navigator.msSaveBlob(fitxer, titol);
+            } else {
+                var enllas = document.createElement("a");
+                if (enllas.download !== undefined) {
+                    var url = URL.createObjectURL(fitxer);
+                    enllas.setAttribute("href", url);
+                    enllas.setAttribute("download", titol);
+                    enllas.style.visibility = 'hidden';
+                    document.body.appendChild(enllas);
+                    enllas.click();
+                    document.body.removeChild(enllas);
+                }
+            }
+            caixaCompartir.removeClass("visible");
+        }
+    });
+
+    accionsGeneral.on('click', '.opcions-registres .tancar', function(){
+        var caixaCompartir = $(this).parent().parent();
+        if (!caixaCompartir.hasClass("visible"))
+            caixaCompartir.addClass("visible");
+        else
+            caixaCompartir.removeClass("visible");
+    });
 
 
 
@@ -349,7 +435,7 @@ $(document).ready(function(){
             accionsGeneral.removeClass("visible");
     }
 
-    function exportaRegistres(context, general = false) {
+    function exportaRegistres(context, general = false, json=false) {
         var aquest = $(context),
             registre = [],
             vregistre = [],
@@ -376,15 +462,18 @@ $(document).ready(function(){
         });
         vregistre = $(vregistre);
         vregistre.each(function(index){
-            //textRegistres += "["+$(this)[0]+"]\n"+$(this)[1]+"->"+$(this)[2]+" = "+$(this)[3]+"; "+$(this)[4]+"; "+$(this)[5]+"; "+$(this)[6]+".\n";
             if (index == 0)
                 textRegistres = "[\n";
-            if (index != vregistre.length - 1) {
+            if (index != vregistre.length - 1)
                 textRegistres += '\t{\n\t\t"data" : "'+$(this)[0]+'",\n\t\t"hora_inici" : "'+$(this)[1]+'",\n\t\t"hora_fi" : "'+$(this)[2]+'",\n\t\t"temps_total" : "'+$(this)[3]+'",\n\t\t"client" : "'+$(this)[4]+'",\n\t\t"concepte" : "'+$(this)[5]+'",\n\t\t"descripcio" : "'+$(this)[6]+'"\n\t},\n';
-            } else {
+            else
                 textRegistres += '\t{\n\t\t"data" : "'+$(this)[0]+'",\n\t\t"hora_inici" : "'+$(this)[1]+'",\n\t\t"hora_fi" : "'+$(this)[2]+'",\n\t\t"temps_total" : "'+$(this)[3]+'",\n\t\t"client" : "'+$(this)[4]+'",\n\t\t"concepte" : "'+$(this)[5]+'",\n\t\t"descripcio" : "'+$(this)[6]+'"\n\t}\n]';
-            }
+            
         });
+
+        if (json) return JSON.parse(textRegistres);
+
         return textRegistres;
     }
+
 });

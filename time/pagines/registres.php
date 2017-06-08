@@ -1,5 +1,5 @@
 <div id="taula-registres">
-    <div class="table-respodnsive">
+    <div class="table-responsive">
         <table class="table table-hover" id="registres">
             <thead>
                 <tr>
@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-    <?php   $query = "SELECT * FROM work_done ORDER BY data DESC, hora_inicial DESC";
+    <?php   $query = "SELECT * FROM work_done ORDER BY data ASC, hora_inicial ASC";
             $result = $conn->query($query);
             while($row = $result->fetch_array(MYSQLI_ASSOC)){ ?>
                     <tr data-id="<?php echo $row['id']; ?>" seleccionat="0">
@@ -43,15 +43,7 @@
                             <span id="eliminar-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-remove eliminar-registre" title="Elimina registre"></span>
                             <span id="editar-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-pencil editar-registre" title="Edita registre"></span>
                             <span id="copia-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-duplicate copia-registre" title="Copia registre"></span>
-                            <span id="enviar-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-share-alt enviar-registre" title="Envia i elimina"></span>
                             <span id="seleccionar-registre-<?php echo $row['id'];?>" class="glyphicon glyphicon-unchecked seleccionar-registre" title="Seleccionar registre"></span>
-                            <div class="enviar-registre-opcions">
-                                <div class="opcions">
-                                    <span class="glyphicon glyphicon-list-alt excel"></span>
-                                    <span class="glyphicon glyphicon-envelope mail"></span>
-                                    <span class="glyphicon glyphicon-save-file fitxer"></span>
-                                </div>
-                            </div>
                         </td>
                     </tr>
             <?php } ?>
@@ -64,10 +56,12 @@
                 <span id="enviar-registres" class="glyphicon glyphicon-share-alt" title="Envia i elimina"></span>
                 <span id="seleccionar-registres" class="glyphicon glyphicon-unchecked" title="Seleccionar registres"></span>
                 <div class="enviar-registres-opcions">
-                    <div class="opcions">
-                        <span class="glyphicon glyphicon-list-alt excel"></span>
-                        <span class="glyphicon glyphicon-envelope mail"></span>
-                        <span class="glyphicon glyphicon-save-file fitxer"></span>
+                    <div class="overlay"></div>
+                    <div class="opcions-registres">
+                        <span class="glyphicon glyphicon-list-alt excel" title="Exportar com a csv per a excel"></span>
+                        <span class="glyphicon glyphicon-envelope mail" title="Enviar via mail"></span>
+                        <span class="glyphicon glyphicon-save-file fitxer" title="Generar fitxer"></span>
+                        <span class="glyphicon glyphicon-remove tancar" title="Cancela accio"></span>
                     </div>
                 </div>
             </div>

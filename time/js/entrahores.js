@@ -29,9 +29,6 @@ $(document).ready(function(){
         if (client.val() == "" || desc.val() == "" || conc.val() == "" || data.val() == "")
             valid = false;
 
-        if (desc.val() == "")
-            valid = false;
-
         return valid;
     }
     

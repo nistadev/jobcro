@@ -29,8 +29,8 @@ if ($accio == 'DELETE'){
     echo "Error, no data was passed.";
   }
 } elseif ($accio == 'POST') {
-  $data = $_POST['data'];
-  if (isset($data)) {
+  if (isset($_POST['data'])) {
+    $data = $_POST['data'];
     $registres = json_decode($data);
     $registres[0][0] = explode("/", $registres[0][0]);
     $registres[0][0] = $registres[0][0][2]."/".$registres[0][0][1]."/".$registres[0][0][0];
@@ -40,14 +40,13 @@ if ($accio == 'DELETE'){
     if($insert) echo "Registre introduit.";
     else echo $conn->error;
   } else {
-    echo "no";
-    $id = $_POST['id'];
-    $data = $_POST['data'];
-    $hora_inici = $_POST["hora_inici"];
-    $hora_fi = $_POST["hora_fi"];
-    $client = $_POST["client"];
-    $conc = $_POST["conc"];
-    $desc = $_POST["descripcio"];
+    $id = $_GET['id'];
+    $data = $_GET['data'];
+    $hora_inici = $_GET["hora_inici"];
+    $hora_fi = $_GET["hora_fi"];
+    $client = $_GET["client"];
+    $conc = $_GET["conc"];
+    $desc = $_GET["descripcio"];
     $qry = "UPDATE work_done SET data='$data', hora_inicial='$hora_inici', hora_final='$hora_fi', client='$client', concepte='$conc', descripcio='$desc' WHERE id='$id'";
     $resultat = $conn->query($qry); 
     if ($resultat) echo "Registre actualiztat correctament!";

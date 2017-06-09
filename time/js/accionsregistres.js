@@ -65,14 +65,13 @@ $(document).ready(function(){
                 copiaValors(true);
                 // enviem la peticio al servidor
                 $.ajax({
-                    url: 'accions.php',
+                    url: 'accions.php?id='+ idRegistre +"&"+ formulari.serialize(),
                     type: 'POST',
-                    data: formulari.serialize() + "&id=" + idRegistre,
                     context: accioClicada,
                     success: function(data){
                         return console.log(data);
                     },
-                    //beforeSend: function(){console.log(idRegistre, $(this).parent().parent().find(".form-control").serialize() + "&id=" + idRegistre);},
+                    //beforeSend: function(){console.log(this.data);},
                     error: function(data){
                         console.log("Error");
                     }

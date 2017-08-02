@@ -1,0 +1,16 @@
+<script>
+    $(document).ready(function(){
+        console.log("Horari carregat...");
+        var mesos = $(".mes");
+        mesos.each(function(){
+            var temps = $(this).parent().siblings().children("td");
+            var sum = 0, total_mes;
+            temps.each(function(){
+                tt = $(this).children(".temps-total").html().trim();
+                sum += parseFloat(tt);
+            });
+            total_mes = sum;
+            $(this).next().html("Total: "+total_mes+"h");
+        });
+    });
+</script>

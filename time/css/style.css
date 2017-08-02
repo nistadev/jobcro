@@ -1,0 +1,257 @@
+body{
+    font-size: 14px;
+}
+span.glyphicon {
+    cursor: pointer;
+}
+main{
+    min-height: 80vh;
+}
+#formulari-hores {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+#formulari-hores .row{
+    margin-bottom: 15px;
+}
+#formulari-importacio {
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: left;
+}
+#formulari-importacio textarea{
+    width: 93%;
+    height: 75px;
+}
+
+#formulari-importacio button {
+    margin-left: 5px;
+}
+
+#formulari-importacio form {
+    margin-bottom: 30px;
+}
+
+#taula-registres {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#taula-registres tr .form-control:not(input) {
+    padding: 6px 0;
+}
+#taula-registres tr input {
+    padding: 6px 5px;
+}
+
+#footer {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+.footer-content{
+    text-align: center;
+    padding: 10px;
+}
+
+#formulari-hores #camp-hora-inici{
+
+}
+
+#formulari-hores #camp-hora-fi{
+    
+}
+
+#formulari-hores #camp-client{
+    
+}
+
+#formulari-hores #camp-descripcio{
+    
+}
+
+#formulari-hores #camp-boto-formulari{
+    margin-top: 25px;
+}
+#formulari-hores #missatge-error{
+    margin-top: 20px;
+}
+#formulari-hores #missatge-error span{
+    color: red;
+}
+
+.loading:after {
+    content: "";
+    background-image: url("../img/loader.gif");
+    background-position: center;
+    background-size: 250%;
+    width: 50px;
+    height: 50px;
+    display: block;
+}
+
+#taula-registres tbody.loading tr{
+    display: none;
+}
+#taula-registres tr[seleccionat="1"]{
+    background-color: #f5f5f5;
+    border: 1px double #111;
+    border-left: 3px solid #000;
+    border-right: 2px solid #000;
+    margin-top: 5px;
+}
+
+#taula-registres td{
+    position: relative;
+}
+
+
+#accionsGeneral{
+    position: relative;
+    width: 100%;
+    height: 0;
+    font-size: 1.3em;
+    display: none;
+    text-align: right;
+}
+#accionsGeneral.visible{
+    display: block;
+}
+
+#accionsGeneral .opcions {
+    position: fixed;
+    background: #fff;
+    bottom: 15px;
+    right: 6%;
+    border: 1px solid #aaa;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    z-index: 5;
+}
+#accionsGeneral .opcions:after {
+    bottom: 100%;
+    right: 10px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(79, 213, 64, 0);
+    border-bottom-color: #aaa;
+    border-width: 10px;
+}
+
+#accionsGeneral .opcions span{
+    padding: 10px;
+    top: 0;
+}
+#accionsGeneral .opcions span:hover{
+    background-color: #aaa;
+}
+
+.enviar-registres-opcions{
+    display: none;
+    position: fixed;
+    bottom: 15px;
+}
+
+.opcions-registres {
+    background: #fff;
+    border: 1px solid #aaa;
+    position: relative;
+    vertical-align: top;
+}
+
+.enviar-registres-opcions.visible{
+    display: block;
+    vertical-align: top;
+}
+.opcions-registres:after {
+    content: "";
+    position: absolute;
+    right: -26px;
+    bottom: 10px;
+    height: 10px;
+    background-color: #000;
+}
+.al-nuvol {
+}
+
+.al-nuvol:before{
+    content: "\2601";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    left: -20px;
+    top: 12px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    z-index: 2;
+}
+#taula-registres .table-responsive {
+    overflow: visible;
+}
+@media screen and (max-width: 768px){
+    #taula-registres .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+#horari tr:first-child {
+    width: 100%;
+    height: auto;
+    display: inline-table;
+    border: 1px solid #333;
+    text-align: left;
+}
+#horari tr:first-child td{
+    border: 0;
+    text-align: left;
+    cursor: initial;
+}
+
+#horari tr {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    text-align: center;
+}
+
+#horari tr td {
+    border: 0;
+    text-align: center;
+    width: 100px;
+    cursor: pointer;
+}
+
+#horari tr h4 {
+    margin-top: 10px;
+}
+
+#horari .data {
+    margin: 0 auto;
+    font-size: 0.8em;
+    padding: 10px 0;
+}
+
+#horari .temps-total {
+    font-weight: bold;
+    font-size: 1.2em;
+    vertical-align: middle;
+    height: 50px;
+}
+
+#horari .temps-total:after {
+    content: "h";
+}

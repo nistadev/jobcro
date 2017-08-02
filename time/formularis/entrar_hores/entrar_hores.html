@@ -1,0 +1,52 @@
+<script>
+$(document).ready(function(){
+    var form = $("#formulari-hores");
+    var formSend = $("#boto-formulari");
+    var missatgeError = $("#missatge-error span");
+
+    document.getElementById('data').valueAsDate = new Date();
+
+    formSend.click(function(e){
+        e.preventDefault();
+        if(validaFormulari()){
+            form.submit();
+        } else {
+            missatgeError.html("Error: Revisa que tots els camps estiguin plens i que la hora inicial no sigui igual o superior a la hora final.").show();
+        }
+    });
+
+    function validaFormulari(){
+        var horaInici = $("#hora_inici");
+        var horaFi = $("#hora_fi");
+        var tempsTotal = $("#temps_total");
+        var client = $("#client");
+        var desc = $("#descripcio");
+        var data = $("#data");
+        var conc = $("#conc");
+        var timestampFinal = (new Date(data.val() + " " + horaFi.val()).getTime() / 1000);
+        var timestampInici = (new Date(data.val() + " " + horaInici.val()).getTime() / 1000);
+        var tt = (timestampFinal - timestampInici) / 3600;
+        tempsTotal.val(tt);
+        var valid = true;
+
+        if (horaInici.val() >= horaFi.val())
+            valid = false;
+
+        if (client.val() == "" || desc.val() == "" || conc.val() == "" || data.val() == "" || tempsTotal == 0)
+            valid = false;
+
+        return valid;
+    }
+    
+    form.submit(function(e){
+        e.preventDefault();
+        $.post("pagines/entra_hores.php", $(this).serialize())
+            .done(function(dades){
+                console.log(dades);
+                document.getElementById("formulari-hores").reset();
+                document.getElementById('data').valueAsDate = new Date();
+                missatgeError.html("<span style='color: green;'>Dades enviades!</span>").show().fadeOut(2000);
+            });
+    });
+});
+</script>

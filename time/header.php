@@ -24,7 +24,7 @@
                     <a href="index.php?page=importar">Importar</a>
                 </li>
                 <li>
-                    <a href="index.php?page=horari">Horari</a>
+                    <a href="index.php?page=estadistiques">Estadistiques</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav text-right">

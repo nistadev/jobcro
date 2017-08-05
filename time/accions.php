@@ -65,6 +65,18 @@ if ($accio == 'DELETE'){
     }
     $result = json_encode($result);
     echo $result;
+  } elseif (isset($_GET["data_registre"])) {
+    $data_registre = $_GET["data_registre"];
+    $qry = "SELECT * FROM work_done WHERE data LIKE '".$data_registre."' ORDER BY data DESC, hora_inicial ASC";
+    $res = $conn->query($qry);
+    $result = array();
+    $result["data"] = array();
+    
+    while($row = $res->fetch_assoc()){
+      $result["data"][] = $row;
+    }
+    $result = json_encode($result);
+    echo $result;
   }
 }
 ?>

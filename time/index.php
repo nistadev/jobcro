@@ -21,7 +21,7 @@
         } elseif ($page == "inici") {
             include("pagines/inici/inici.php");
             include("pagines/inici/inici.html");
-        } elseif ($page == "horari") {
+        } elseif ($page == "estadistiques") {
             include("pagines/horari/horari.php");
             include("pagines/horari/horari.html");
         } elseif ($page == "configuracions") {

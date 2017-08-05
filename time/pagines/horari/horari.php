@@ -1,4 +1,3 @@
-<h2>Horari</h2>
 <?php
     $mesos = array(
         "01" => "Gener",
@@ -18,19 +17,14 @@
     if (isset($conn)) {
         $dies = array();
         $ant_mes = "00";
-        $query = "SELECT id, data, sum(temps_total) as temps_total FROM work_done GROUP BY data ORDER BY data ASC";
+        $query = "SELECT id, data, hora_inicial, hora_final, sum(temps_total) as temps_total, concepte, descripcio FROM work_done GROUP BY data ORDER BY data ASC";
         $result = $conn->query($query);
         while($row = $result->fetch_array(MYSQLI_ASSOC)){
             $dies[] = $row;
         }
-    } else {
-        echo "no conn";
-    }
-
-    if (count($dies) > 0) {
-        $primera_volta = 1;
-        foreach ($dies as $dia) { ?>
-            <?php 
+        if (count($dies) > 0) {
+            $primera_volta = 1;
+            foreach ($dies as $dia) { 
                 $data_array = explode("-", $dia['data']);
                 $mes = $data_array[1];
                 $any = $data_array[0];
@@ -38,8 +32,8 @@
                     if($primera_volta) { ?>
                         <div class="table-responsive">
                             <table class="table table-hover" id="horari">
-            <?php 
-                    } else { ?>
+            
+            <?php } else { ?>
                             </table>
                         </div>
                         <div class="table-responsive">
@@ -51,16 +45,20 @@
                     $ant_mes = $mes;
                     $primera_volta = 0;
                 }
-            ?>
-            <tr>
-                <td>
-                    <div class="data"><?php echo $dia['data']; ?></div>
-                    <div class="temps-total"><?php echo $dia['temps_total'];?></div>
-                </td>
-            </tr>        
-            
+                ?>
+                <tr>
+                    <td>
+                        <div class="data"><?php echo $dia['data']; ?></div>
+                        <div class="temps-total"><?php echo $dia['temps_total'];?></div>
+                    </td>
+                </tr>        
+                
         <?php }
+        }
+    } else {
+        echo "<h3>Error al establir una connexió amb la base de dades.</h3>";
     }
+
 ?>
             
     </table>

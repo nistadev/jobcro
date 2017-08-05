@@ -1,7 +1,11 @@
 <script>
     $(document).ready(function(){
         console.log("Horari carregat...");
-        var mesos = $(".mes");
+        var mesos = $(".mes"), 
+            dia = $("td").has(".data"),
+            registres,
+            diaClicat;
+
         mesos.each(function(){
             var temps = $(this).parent().siblings().children("td");
             var sum = 0, total_mes;
@@ -12,5 +16,93 @@
             total_mes = sum;
             $(this).next().html("Total: "+total_mes+"h");
         });
+
+        dia.on("click", function(){
+            diaClicat = this;
+            var data = $(this).children(".data").text().trim();
+            var altresDies = $('td.registres-on');
+
+            if (!$(this).hasClass("registres-on")) {
+                altresDies.removeClass("registres-on");
+                $(this).addClass("registres-on");
+
+                $.ajax({
+                    url: 'accions.php?data_registre=' + data,
+                    type: 'GET',
+                    success: function(data){
+                        registres = data;
+                        return updateRegistres(true);
+                    },
+                    error: function(data){
+                        console.log("Error");
+                    }
+                });
+            } else {
+                $(this).removeClass("registres-on");
+                updateRegistres();
+            }
+        });
+
+        function updateRegistres(mostra=false) {
+            var dates = $(diaClicat).parent().parent().parent().parent();
+            if (mostra) {
+                var regs = JSON.parse(registres);
+
+                dates.children().remove("#registres");
+                dates.siblings().children().remove("#registres");
+
+                taula = `<table class="table table-hover" id="registres">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-12 col-sm-12 col-md-1 col-lg-1">Data</th>
+                                    <th class="col-xs-12 col-sm-12 col-md-1 col-lg-1">Hora Inicial</th>
+                                    <th class="col-xs-12 col-sm-12 col-md-1 col-lg-1">Hora Final</th>
+                                    <th class="col-xs-12 col-sm-12 col-md-1 col-lg-1">Total</th>
+                                    <th class="col-xs-12 col-sm-12 col-md-1 col-lg-1">Client</th>
+                                    <th class="col-xs-12 col-sm-12 col-md-2 col-lg-2">Concepte</th>
+                                    <th class="col-xs-12 col-sm-12 col-md-4 col-lg-4">Descripcio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>`;
+
+                dates.append(taula);
+
+                dates = $(diaClicat).parent().parent().parent().parent().children('#registres');
+
+                for(var i = 0; i < regs.data.length; i++) {
+                    dates.children("tbody").append(`
+                        <tr data-id="" seleccionat="0">
+                            <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data">`+
+                                regs.data[i].data+
+                            '</td>'+
+                            '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_inicial">'+
+                                regs.data[i].hora_inicial+
+                            '</td>'+
+                            '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_final">'+
+                                regs.data[i].hora_final+
+                            '</td>'+
+                            '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-temps_total">'+
+                                regs.data[i].temps_total+"h"+
+                            '</td>'+
+                            '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-client">'+
+                                regs.data[i].client+
+                            '</td>'+
+                            '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-concepte">'+
+                                regs.data[i].concepte+
+                            '</td>'+
+                            '<td class="col-xs-12 col-sm-12 col-md-6 col-lg-6 camp-descripcio">'+
+                                regs.data[i].descripcio+
+                            `</td>
+                        </tr>
+                    `).slideDown();
+                    regs.data[i].id;
+                }
+            } else {
+                dates.children().remove("#registres");
+                dates.siblings().children().remove("#registres");
+            }
+        }
     });
 </script>

@@ -5,7 +5,7 @@ create table work_done (
     data date,
     hora_inicial time,
     hora_final time,
-    temps_total decimal,
+    temps_total decimal(10,2),
     -- tipus_feina int,
     client varchar(35),
     concepte varchar(25),

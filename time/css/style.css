@@ -255,3 +255,10 @@ main{
 #horari .temps-total:after {
     content: "h";
 }
+
+#horari tr td.registres-on {
+    /*border: 2px solid #333;
+    border-top: 0;*/
+    background-color: #eee;
+
+}

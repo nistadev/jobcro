@@ -7,14 +7,20 @@
             diaClicat;
 
         mesos.each(function(){
-            var temps = $(this).parent().siblings().children("td");
-            var sum = 0, total_mes;
+            var temps = $(this).parent().siblings().children("td"),
+                sum = 0, 
+                numDiesMes = 0, 
+                total_mes,
+                hores_acumulades;
+
             temps.each(function(){
                 tt = $(this).children(".temps-total").html().trim();
                 sum += parseFloat(tt);
+                numDiesMes++;
             });
             total_mes = sum;
-            $(this).next().html("Total: "+total_mes+"h");
+            hores_acumulades = (total_mes - (7 * numDiesMes)).toFixed(2);
+            $(this).next().html("Total: "+total_mes+"h"+(hores_acumulades > -14 ? "<br/>Hores Acumulades: "+ hores_acumulades + "h" : ""));
         });
 
         dia.on("click", function(){
@@ -97,7 +103,6 @@
                             `</td>
                         </tr>
                     `).slideDown();
-                    regs.data[i].id;
                 }
             } else {
                 dates.children().remove("#registres");

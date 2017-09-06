@@ -22,8 +22,8 @@
             include("pagines/inici/inici.php");
             include("pagines/inici/inici.html");
         } elseif ($page == "estadistiques") {
-            include("pagines/horari/horari.php");
-            include("pagines/horari/horari.html");
+            include("pagines/estadistiques/estadistiques.php");
+            include("pagines/estadistiques/estadistiques.html");
         } elseif ($page == "configuracions") {
             include("formularis/configuracions/configuracions.php");
             include("formularis/configuracions/configuracions.html");

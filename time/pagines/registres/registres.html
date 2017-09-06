@@ -359,7 +359,7 @@ $(document).ready(function(){
 
         registresFormatats = exportaRegistres(regs, true, true);
 
-        exportaCSV(registresFormatats, "prova");
+        exportaCSV(registresFormatats, "registres-");
 
         function exportaCSV(regs, titolFitxer) {
             var caixaCompartir = $(this).parent().parent();
@@ -388,8 +388,8 @@ $(document).ready(function(){
             var regsCSV = '';
             for(var i = 0; i <= regs.length-1; i++){
                 var data = regs[i]["data"].split("/");
-                data = data[1]+"/"+data[0]+"/20"+data[2];
-                regsCSV += "patri,,,"+data+','+parseFloat(regs[i]["temps_total"])+','+regs[i]["client"]+','+regs[i]["concepte"]+','+regs[i]["descripcio"]+','+'\r\n';
+                data = data[0]+"/"+data[1]+"/20"+data[2];
+                regsCSV += "patri;;;"+data+';'+parseFloat(regs[i]["temps_total"])+';'+regs[i]["client"]+';'+regs[i]["concepte"]+';'+regs[i]["descripcio"]+';'+'\r\n';
             }
             
             return regsCSV;
@@ -402,7 +402,7 @@ $(document).ready(function(){
 
         registresFormatats = exportaRegistres(regs, true);
 
-        exportaFitxer(registresFormatats, "registres");
+        exportaFitxer(registresFormatats, "registres-");
 
         function exportaFitxer(regs, titolFitxer) {
             var caixaCompartir = $(this).parent().parent();

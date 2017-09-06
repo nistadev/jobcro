@@ -1,0 +1,119 @@
+<script>
+    $(document).ready(function(){
+        var formulari = $("#formulari-consultes"),
+            registres;
+
+        formulari.submit(function(evt){
+            var client = $("#consulta-client"),
+                concepte = $("#consulta-concepte");
+
+            evt.preventDefault();
+            if (client.val() != "" || concepte.val() != "")
+            {
+                var consulta = "SELECT * FROM work_done WHERE client LIKE '\%"+client.val().trim()+"%' AND concepte LIKE '%"+concepte.val().trim()+"%' ORDER BY data ASC;"
+                $.ajax({
+                    url: 'accions.php',//?consulta=' + consulta,
+                    type: 'GET',
+                    data: {
+                        consulta: consulta
+                    },
+                    success: function(data){
+                        registres = data;
+                        console.log(data);
+                        //return console.log(data);
+                        return updateRegistres();
+                    },
+                    error: function(data){
+                        console.log("Error");
+                    }
+                });
+            }
+        });
+
+        function updateRegistres() {
+            var consulta = $("#resultat-consulta .registres tbody"),
+                estadistiques = $("#resultat-consulta .estadistiques-consulta tbody"),
+                regs = JSON.parse(registres),
+                totalHores = 0,
+                numRegistres = 0,
+                mitjanaHores = 0,
+                maxTemps = 0,
+                minTemps = 0,
+                mitjanaTemps = 0
+                data_ant = '1900-00-00';
+
+            consulta.html("");
+
+            if (regs == "") {
+                if (!estadistiques.parent().hasClass("amagat"))
+                    estadistiques.parent().addClass("amagat");
+            } else {
+                if (estadistiques.parent().hasClass("amagat"))
+                    estadistiques.parent().removeClass("amagat");
+            }
+            for(var i = 0; i < regs.data.length; i++) {
+                if (i == 0){
+                    minTemps = parseFloat(regs.data[i].temps_total);
+                }
+                consulta.append(`
+                    <tr>
+                        <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data">`+
+                            regs.data[i].data+
+                        '</td>'+
+                        '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_inicial">'+
+                            regs.data[i].hora_inicial+
+                        '</td>'+
+                        '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_final">'+
+                            regs.data[i].hora_final+
+                        '</td>'+
+                        '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-temps_total">'+
+                            regs.data[i].temps_total+"h"+
+                        '</td>'+
+                        '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-client">'+
+                            regs.data[i].client+
+                        '</td>'+
+                        '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-concepte">'+
+                            regs.data[i].concepte+
+                        '</td>'+
+                        '<td class="col-xs-12 col-sm-12 col-md-6 col-lg-6 camp-descripcio">'+
+                            regs.data[i].descripcio+
+                        `</td>
+                    </tr>
+                `).slideDown();
+                totalHores += parseFloat(regs.data[i].temps_total);
+                if (maxTemps < parseFloat(regs.data[i].temps_total))
+                    maxTemps = parseFloat(regs.data[i].temps_total);
+                if (minTemps > parseFloat(regs.data[i].temps_total))
+                    minTemps = parseFloat(regs.data[i].temps_total);
+
+                if (regs.data[i].data != data_ant) {
+                    numRegistres++;
+                    data_ant = regs.data[i].data;
+                }
+            }
+
+            console.log(numRegistres);
+            mitjanaHores = totalHores / numRegistres;
+            mitjanaHores = mitjanaHores.toFixed(2);
+            mitjanaTemps = (minTemps + maxTemps) / 2;
+            estadistiques.html("");
+            estadistiques.append(`
+                <tr>
+                    <td class="col-xs-12 col-sm-12 col-md-3 col-lg-3">`+
+                        totalHores+"h"+
+                    '</td>'+
+                    '<td class="col-xs-12 col-sm-12 col-md-3 col-lg-3">'+
+                        mitjanaHores+"h/dia"+
+                    '</td>'+
+                    '<td class="col-xs-12 col-sm-12 col-md-3 col-lg-3">'+
+                        maxTemps+
+                    '</td>'+
+                    '<td class="col-xs-12 col-sm-12 col-md-3 col-lg-3">'+
+                        minTemps+
+                    `</td>
+                </tr>
+            `);
+
+        }
+    });
+</script>

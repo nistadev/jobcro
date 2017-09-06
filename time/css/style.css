@@ -7,6 +7,14 @@ span.glyphicon {
 main{
     min-height: 80vh;
 }
+#menu-principal.navbar-default .navbar-nav>.active>a, 
+#menu-principal.navbar-default .navbar-nav>.active>a:focus, 
+#menu-principal.navbar-default .navbar-nav>.active>a:hover {
+    color: #000;
+    background-color: transparent;
+    text-shadow: 0px 0px 5px #aaa;
+}
+
 #formulari-hores {
     max-width: 600px;
     margin: 0 auto;
@@ -215,6 +223,9 @@ main{
     border: 1px solid #333;
     text-align: left;
 }
+#horari tr:first-child:hover {
+    background-color: #fff;
+}
 #horari tr:first-child td{
     border: 0;
     text-align: left;
@@ -260,5 +271,31 @@ main{
     /*border: 2px solid #333;
     border-top: 0;*/
     background-color: #eee;
+
+}
+
+/*** Formulari Consultes ***/
+
+.formulari-consultes {
+
+}
+
+.formulari-consultes .form-group {
+    width: 92%;
+}
+.formulari-consultes .form-group input {
+    width: 49%;
+}
+
+.amagat {
+    display: none;
+}
+
+.estadistiques-consulta th, .estadistiques-consulta td{
+    text-align: center;
+}
+
+.estadistiques-consulta td {
+    font-size: 24px;
 
 }

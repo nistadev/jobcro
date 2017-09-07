@@ -10,6 +10,6 @@ create table work_done (
     client varchar(35),
     concepte varchar(25),
     descripcio varchar(250),
-    -- nuvol int,
+    nuvol tinyint(2),
     primary key (id)
 );

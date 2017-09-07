@@ -32,6 +32,7 @@ if ($accio == 'DELETE'){
   if (isset($_POST['data'])) {
     $data = $_POST['data'];
     $registres = json_decode($data);
+    var_dump($registres);
     $registres[0][0] = explode("/", $registres[0][0]);
     $registres[0][0] = $registres[0][0][2]."/".$registres[0][0][1]."/".$registres[0][0][0];
     $insert_query = "INSERT INTO work_done VALUES (null, '".$registres[0][0]."', '".$registres[0][1]."', '".$registres[0][2]."', '".$registres[0][4]."', '".$registres[0][5]."', '".$registres[0][6]."', '".$registres[0][7]."', 0)";

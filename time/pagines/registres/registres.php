@@ -19,7 +19,7 @@
             $result = $conn->query($query);
             while($row = $result->fetch_array(MYSQLI_ASSOC)){ ?>
                     <tr data-id="<?php echo $row['id']; ?>" seleccionat="0">
-                        <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data <?php if(!is_null($row['nuvol'])) echo 'al-nuvol';?>">
+                        <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data <?php if(!is_null($row['nuvol']) && ($row['nuvol'] != 0)) echo 'al-nuvol';?>">
                             <?php echo date("d/m/y", strtotime($row["data"])); ?>
                         </td>
                         <td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_inicial">

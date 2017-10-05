@@ -6,11 +6,11 @@
             </div>
             <div id="camp-hora-inici" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <label for="hora_inici">Hora Inici</label><br/>
-                <input type="time" step="900" value="09:00" name="hora_inici" id="hora_inici" class="form-control">
+                <input type="time" step="900" value="07:30" name="hora_inici" id="hora_inici" class="form-control">
             </div>
             <div id="camp-hora-fi" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 <label for="hora_fi">Hora Fi</label><br/>
-                <input type="time" step="900" value="09:30" name="hora_fi" id="hora_fi" class="form-control">
+                <input type="time" step="900" value="07:30" name="hora_fi" id="hora_fi" class="form-control">
             </div>
         </div>
         <div class="row">

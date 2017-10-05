@@ -16,10 +16,11 @@ if(!$conn){
 } else {
     $query = "INSERT INTO work_done(hora_inicial, hora_final, temps_total, client, descripcio, data, concepte) VALUES ('$hora_inici', '$hora_fi', $temps_total, '$client', '$desc', '$data', '$conc')";
     $insert = $conn->query($query);
+    var_dump($query);
     if ($insert)
         echo "Dades registrades.";
     else
-        echo "Error";
+        echo "Error:".$conn->error;
 }
 
 ?>

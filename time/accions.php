@@ -90,6 +90,16 @@ if ($accio == 'DELETE'){
     }
     $result = json_encode($result);
     echo $result;
+  } elseif(isset($_GET["configuracions"])) {
+    $qry = "SELECT * FROM ".$_GET['configuracions'];
+    $res = $conn->query($qry);
+    $result = array();
+    $result["data"] = array();
+    while($row = $res->fetch_assoc()){
+      $result["data"][] = $row;
+    }
+    $result = json_encode($result);
+    echo $result;
   }
 }
 ?>

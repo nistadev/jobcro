@@ -13,3 +13,10 @@ create table work_done (
     nuvol tinyint(2),
     primary key (id)
 );
+
+create table hores_mes(
+    mes int,
+    any int,
+    hores int,
+    primary key(mes, any)
+);

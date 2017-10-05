@@ -4,14 +4,28 @@
         var mesos = $(".mes"), 
             dia = $("td").has(".data"),
             registres,
-            diaClicat;
+            diaClicat,
+            hores_acumulades = 0,
+            horesDiariesMes;
+
+        $.ajax({
+            url: 'accions.php?configuracions=hores_mes',
+            type: 'GET',
+            success: function(data){
+                horesDiariesMes = data["data"];
+                return console.log(data);
+            },
+            error: function(data){
+                console.log("Error: " + data);
+            }
+        });
 
         mesos.each(function(){
             var temps = $(this).parent().siblings().children("td"),
                 sum = 0, 
                 numDiesMes = 0, 
-                total_mes,
-                hores_acumulades;
+                total_mes = 0,
+                recompte_hores = 0;
 
             temps.each(function(){
                 tt = $(this).children(".temps-total").html().trim();
@@ -19,9 +33,12 @@
                 numDiesMes++;
             });
             total_mes = sum;
-            hores_acumulades = (total_mes - (7 * numDiesMes)).toFixed(2);
-            $(this).next().html("Total: "+total_mes+"h"+(hores_acumulades > -14 ? "<br/>Hores Acumulades: "+ hores_acumulades + "h" : ""));
+            recompte_hores = (total_mes - (7 /*horesDiariesMes*/ * numDiesMes)).toFixed(2);
+            hores_acumulades += parseFloat(recompte_hores);
+            $(this).next().html("Total: "+total_mes+"h");
         });
+        
+        $(mesos[mesos.length-1]).next().html($(mesos[mesos.length-1]).next().text().trim()+"<br/>Hores Acumulades: "+ hores_acumulades + "h");
 
         dia.on("click", function(){
             diaClicat = this;

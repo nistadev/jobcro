@@ -100,7 +100,7 @@ $(document).ready(function(){
             vclient = client.text().trim();
             vconcepte = concepte.text().trim();
             vdescripcio = descripcio.text().trim();
-            vtempsTotal = tempsTotal.text();
+            vtempsTotal = tempsTotal.text().trim();
         }
 
         function copiaValors(guardar = false){ //copia els valors del formulari
@@ -129,8 +129,8 @@ $(document).ready(function(){
             horaInicial.html('<input type="time" step="900" name="hora_inici" id="hora_inici" class="form-control">');
             horaInicial.children().val(vhoraInicial);
             horaInicial.on("change", function(){
-                var horaIni = $(accioClicada).parent().siblings(".camp-hora_inicial").children("input").val();
-                var horaFi = $(accioClicada).parent().siblings(".camp-hora_final").children("input").val();
+                var horaIni = $(accioClicada).parent().siblings(".camp-hora_inicial").children("input").val().trim();
+                var horaFi = $(accioClicada).parent().siblings(".camp-hora_final").children("input").val().trim();
                 updateTempsTotal(horaIni, horaFi);
             });
 
@@ -152,7 +152,7 @@ $(document).ready(function(){
                 var timestampFinal = (new Date(vdata + " " + horaFi).getTime() / 1000);
                 var timestampInici = (new Date(vdata + " " + horaIni).getTime() / 1000);
                 var tt = (timestampFinal - timestampInici) / 3600;
-                tempsTotal.children("input").val(tt);
+                tempsTotal.children("input").val(parseFloat(tt));
             }
         }
 
@@ -402,11 +402,11 @@ $(document).ready(function(){
 
         registresFormatats = exportaRegistres(regs, true);
 
-        exportaFitxer(registresFormatats, "registres-");
+        exportaFitxer(registresFormatats);
 
-        function exportaFitxer(regs, titolFitxer) {
+        function exportaFitxer(regs) {
             var caixaCompartir = $(this).parent().parent();
-            var titol = titolFitxer + '.json' || 'registres.json';
+            var titol = prompt("Nom del fitxer: ") || 'registre(s).json';
             var fitxer = new Blob([regs], { type: 'application/json;charset=utf-8;' });
 
             if (navigator.msSaveBlob) { // IE 10+

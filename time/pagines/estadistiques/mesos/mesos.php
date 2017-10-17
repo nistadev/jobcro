@@ -41,14 +41,15 @@
             <?php                
                     }
                     $total_mes = 0;
-                    echo "<td class='col-md-6 col-lg-6 mes'><h4>".$mesos[$mes]." ".$any."</h4></td><td style='vertical-align: middle;' class='col-md-6 col-lg-6 total-mes'>Total ".$mesos[$mes].": ".$total_mes."</td>";
+                    echo "<td class='col-md-6 col-lg-6 mes' data-mes='".$mes."' data-any='".$any."'><h4>".$mesos[$mes]." ".$any."</h4></td><td style='vertical-align: middle;' class='col-md-6 col-lg-6 total-mes'>Total ".$mesos[$mes].": ".$total_mes."</td>";
                     $ant_mes = $mes;
                     $primera_volta = 0;
                 }
+                $dia['data'] = explode("-", $dia['data']);
                 ?>
                 <tr>
                     <td>
-                        <div class="data"><?php echo $dia['data']; ?></div>
+                        <div class="data" data-date="<?php echo $dia['data'][0].'-'.$dia['data'][1].'-'.$dia['data'][2] ;?>"><?php echo $dia['data'][2]; ?></div>
                         <div class="temps-total"><?php echo $dia['temps_total'];?></div>
                     </td>
                 </tr>        

@@ -1,498 +1,513 @@
 <script>
 $(document).ready(function(){
-    var vdata, 
-        vhoraInicial, 
-        vhoraFinal, 
-        vtempsTotal,
-        vclient, 
-        vconcepte, 
-        vdescripcio,
-        accions = $(".accions"),
-        accionsGeneral = $("#accionsGeneral");
+    var taula = $("#registres tbody"),
+        totsRegistres;
 
     /*
-     * ACCIONS UN SOL REGISTRE
+     * CREACIO DE LA TAULA
      */
-
-    /*** eliminar registre ***/
-    accions.on('click', '.eliminar-registre', function(){
-        var accioClicada = this;
-        var idRegistre = $(this).parent().parent().data("id");
-        var confirmacio = confirm("Estas segur de que vols eliminar el registre?");
-        if(confirmacio){
-            $.ajax({
-                url: 'accions.php?id=' + idRegistre,
-                type: 'DELETE',
-                context: accioClicada,
-                success: function(data){
-                    console.log(data);
-                    return $(this).parent().parent().fadeOut("slow");
-                },
-                error: function(data){
-                    console.log("Error");
-                }
-            });
+    $.ajax({
+        url: 'accions.php?registres',
+        type: 'GET',
+        success: function(data){
+            totsRegistres = JSON.parse(data);
+            return pintaTaula();
+        },
+        error: function(data){
+            console.log("Error:" + data);
         }
-
     });
 
-    /*** editar registre ***/
-    accions.on('click', '.editar-registre', function(){
-        var accioClicada = this;
-        var data = $(this).parent().siblings(".camp-data"),
-            horaInicial = $(this).parent().siblings(".camp-hora_inicial"),
-            horaFinal = $(this).parent().siblings(".camp-hora_final"),
-            tempsTotal = $(this).parent().siblings(".camp-temps_total"),
-            client = $(this).parent().siblings(".camp-client"),
-            concepte = $(this).parent().siblings(".camp-concepte"),
-            descripcio = $(this).parent().siblings(".camp-descripcio"),
-            idRegistre = $(this).parent().parent().data("id"),
-            formulari = $(this).parent().parent().find(".form-control"),
-            altresIconesAccions = $(this).parent().parent().siblings().children().children("span");
+    function pintaTaula(){
+        // console.log(totsRegistres.data.length);
+        // totsRegistres.data = totsRegistres.data.sort((a,b)=>(a-b));
+        for (var i = 0; i < totsRegistres.data.length; i++) {
+            r = totsRegistres.data[i];
+            //taula.append(+" - "+r.hora_inicial+" - "+r.hora_final+" - "+r.temps_total+" - "+r.client+" - "+r.concepte+" - "+r.descripcio+" - "+r.nuvol+"</p>");
+            r.data = r.data.split("-");
+            taula.append('<tr data-id="'+r.id+'" seleccionat="0">'+
+                '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-data '+r.nuvol+'">'+r.data[2]+'/'+r.data[1]+'/'+r.data[0]+'</td>'+
+                '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_inicial">'+r.hora_inicial+'</td>'+
+                '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-hora_final">'+r.hora_final+'</td>'+
+                '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-temps_total">'+r.temps_total+'h</td>'+
+                '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-client">'+r.client+'</td>'+
+                '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 camp-concepte">'+r.concepte+'</td>'+
+                '<td class="col-xs-12 col-sm-12 col-md-4 col-lg-4 camp-descripcio">'+r.descripcio+'</td>'+
+                '<td class="col-xs-12 col-sm-12 col-md-1 col-lg-1 accions">'+
+                    '<span id="eliminar-registre-'+r.id+'" class="glyphicon glyphicon-remove eliminar-registre" title="Elimina registre"></span>'+
+                    '<span id="editar-registre-'+r.id+'" class="glyphicon glyphicon-pencil editar-registre" title="Edita registre"></span>'+
+                    '<span id="copia-registre-'+r.id+'" class="glyphicon glyphicon-duplicate copia-registre" title="Copia registre"></span>'+
+                    '<span id="seleccionar-registre-'+r.id+'" class="glyphicon glyphicon-unchecked seleccionar-registre" title="Seleccionar registre"></span>'+
+                '</td>'+
+            '</tr>');
+        }
+        $("#registres").removeClass("loading");
+        carregaAccions();
+    }
+    
+    function carregaAccions(){
+        var vdata, 
+            vhoraInicial, 
+            vhoraFinal, 
+            vtempsTotal,
+            vclient, 
+            vconcepte, 
+            vdescripcio,
+            accions = $(".accions"),
+            accionsGeneral = $("#accionsGeneral");
 
-        //no estem editant
-        if ($(this).hasClass("glyphicon-pencil")) {
-            copiaText();
-            descripcio.html("");
-            $(this).removeClass("glyphicon-pencil").addClass("glyphicon-ok");
-            $(this).siblings("span").hide();
-            $(this).parent().append("<span class='glyphicon glyphicon-remove cancela'></span>");
-            altresIconesAccions.hide();
 
-            fesCampsEditables();
 
-        } else { // estem editant
-            if (formulariValid()) { // comprovem si es valid el formulari
-                copiaValors(true);
-                // enviem la peticio al servidor
+        /*
+         * ACCIONS UN SOL REGISTRE
+         */
+
+        /*** eliminar registre ***/
+        accions.on('click', '.eliminar-registre', function(){
+            var accioClicada = this;
+            var idRegistre = $(this).parent().parent().data("id");
+            var confirmacio = confirm("Estas segur de que vols eliminar el registre?");
+            if(confirmacio){
                 $.ajax({
-                    url: 'accions.php?id='+ idRegistre +"&"+ formulari.serialize(),
-                    type: 'POST',
+                    url: 'accions.php?id=' + idRegistre,
+                    type: 'DELETE',
                     context: accioClicada,
                     success: function(data){
-                        return console.log(data);
+                        console.log(data);
+                        return $(this).parent().parent().fadeOut("slow");
                     },
-                    //beforeSend: function(){console.log(formulari.serialize());},
                     error: function(data){
                         console.log("Error");
                     }
                 });
-                surtModeEdicio();
-                $(this).addClass("glyphicon-pencil").removeClass("glyphicon-ok");
-                $(this).siblings("span.glyphicon-remove.cancela").remove();
-                altresIconesAccions.show();
-                $(this).siblings("span").show();
-            } else { // formulari no valid
-                alert("Camps invalids, comproveu que no hi haigui cap camp buit i que la data d'inici no sigui mes gran que la final.");
-            } // validacio formulari
-        } // comprovacio editant
-
-        function formulariValid() { // funcio validar form
-            if(data.children().val() == "" || horaInicial.children().val() >= horaFinal.children().val() || client.children().val() == "" || concepte.children().val() == "" || descripcio.children().val() == "") 
-                return false;
-            return true;
-        }
-
-        function copiaText(){ //copia el text del html
-            vdata = data.text().trim();
-            vhoraInicial = horaInicial.text().trim();
-            vhoraFinal = horaFinal.text().trim();
-            vclient = client.text().trim();
-            vconcepte = concepte.text().trim();
-            vdescripcio = descripcio.text().trim();
-            vtempsTotal = tempsTotal.text().trim();
-        }
-
-        function copiaValors(guardar = false){ //copia els valors del formulari
-            vdata = data.children().val();
-            vhoraInicial = horaInicial.children().val();
-            vhoraFinal = horaFinal.children().val();
-            vtempsTotal = tempsTotal.text();
-            vclient = client.children().val();
-            vconcepte = concepte.children().val();
-            vdescripcio = descripcio.children().val();
-            if(guardar){
-                var timestampFinal = (new Date(vdata + " " + vhoraFinal).getTime() / 1000);
-                var timestampInici = (new Date(vdata + " " + vhoraInicial).getTime() / 1000);
-                vtempsTotal = (timestampFinal - timestampInici) / 3600 + "h";
-                vdata = vdata.split("-");
-                vdata = vdata[2] + "/" + vdata[1] + "/" + vdata[0].charAt(2) + vdata[0].charAt(3);
             }
-        }
 
-        function fesCampsEditables(){ // sustitueix els camps per camps editables amb les dades que teniem
-            data.html("<input type='date' name='data' class='form-control' style='width:90%;'>");
-            var dataAsetar = vdata.split("/");
-            dataAsetar = "20"+dataAsetar[2]+"-"+dataAsetar[1]+"-"+dataAsetar[0];
-            data.children("input").val(dataAsetar);
-
-            horaInicial.html('<input type="time" step="900" name="hora_inici" id="hora_inici" class="form-control">');
-            horaInicial.children().val(vhoraInicial);
-            horaInicial.on("change", function(){
-                var horaIni = $(accioClicada).parent().siblings(".camp-hora_inicial").children("input").val().trim();
-                var horaFi = $(accioClicada).parent().siblings(".camp-hora_final").children("input").val().trim();
-                updateTempsTotal(horaIni, horaFi);
-            });
-
-            horaFinal.html('<input type="time" step="900" name="hora_fi" id="hora_fi" class="form-control">');
-            horaFinal.children().val(vhoraFinal);
-            horaFinal.on("change", function(){
-                var horaIni = $(accioClicada).parent().siblings(".camp-hora_inicial").children("input").val();
-                var horaFi = $(accioClicada).parent().siblings(".camp-hora_final").children("input").val();
-                updateTempsTotal(horaIni, horaFi);
-            });
-
-            tempsTotal.html('<input type="text" name="temps_total" id="temps_total" class="form-control" value="'+parseFloat(vtempsTotal)+'" readonly>');
-            client.html('<input type="text" name="client" id="client" class="form-control" value="'+vclient+'">');
-
-            concepte.html('<input type="text" name="conc" id="conc" class="form-control" value="'+vconcepte+'">');
-
-            descripcio.html('<input type="text" name="descripcio" id="descripcio" class="form-control" value="'+vdescripcio+'">');
-            function updateTempsTotal(horaIni, horaFi) {
-                var timestampFinal = (new Date(vdata + " " + horaFi).getTime() / 1000);
-                var timestampInici = (new Date(vdata + " " + horaIni).getTime() / 1000);
-                var tt = (timestampFinal - timestampInici) / 3600;
-                tempsTotal.children("input").val(parseFloat(tt));
-            }
-        }
-
-        function surtModeEdicio(){ //sortim de mode edicio, deixem les dades com estaven o les noves, en cas de haver fet la peticio
-            data.html(vdata);
-            horaInicial.html(vhoraInicial);
-            horaFinal.html(vhoraFinal);
-            tempsTotal.html(vtempsTotal);
-            client.html(vclient);
-            concepte.html(vconcepte);
-            descripcio.html(vdescripcio);
-        }
-
-    });
-
-    /*** cancelar edicio registre ***/
-    accions.on('click', 'span.glyphicon-remove.cancela', function(){
-        var accioClicada = this,
-            data = $(this).parent().siblings(".camp-data"),
-            horaInicial = $(this).parent().siblings(".camp-hora_inicial"),
-            horaFinal = $(this).parent().siblings(".camp-hora_final"),
-            tempsTotal = $(this).parent().siblings(".camp-temps_total"),
-            client = $(this).parent().siblings(".camp-client"),
-            concepte = $(this).parent().siblings(".camp-concepte"),
-            descripcio = $(this).parent().siblings(".camp-descripcio"),
-            altresIconesAccions = $(this).parent().parent().siblings().children().children("span");
-
-        tornaValors();
-
-        function tornaValors() { //recuperem els valors inicials
-            data.html(vdata);
-            horaInicial.html(vhoraInicial);
-            horaFinal.html(vhoraFinal);
-            tempsTotal.html(vtempsTotal);
-            client.html(vclient);
-            concepte.html(vconcepte);
-            descripcio.html(vdescripcio);
-        }
-        $(this).siblings(".editar-registre").addClass("glyphicon-pencil").removeClass("glyphicon-ok");
-        $(this).siblings("span").show();
-        altresIconesAccions.show();
-        $(this).remove();
-    });
-
-    /*** copiar registre ***/
-    accions.on('click', '.copia-registre', function(){
-        var aquest = this,
-            registreFormatat;
-
-        registreFormatat = exportaRegistres([aquest]);
-
-        function copiaRegistre() {
-            var textArea = document.createElement("textarea");
-            textArea.value = registreFormatat;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                var successful = document.execCommand('copy');
-                if (successful) {
-                    $(aquest).parent().parent().fadeOut(50).fadeIn(300);
-                } else {
-                    alert("Hi ha hagut un error i no s'ha pogut copiar el registre.");
-                }
-            } catch (err) {
-                console.log('Oops, unable to copy', err);
-            }
-            document.body.removeChild(textArea);
-        }
-
-        copiaRegistre();
-    });
-
-    /*** seleccionar registre ***/
-    accions.on('click', '.seleccionar-registre', function(){
-        var check = $(this),
-            filaPare = $(this).parent().parent();
-
-        if (check.hasClass("glyphicon-unchecked")) {
-            check.addClass("glyphicon-check").removeClass("glyphicon-unchecked");
-            filaPare.attr("seleccionat", 1);
-            if(!accionsGeneral.hasClass("visible"))
-                accionsGeneral.addClass("visible");
-        } else {
-            check.addClass("glyphicon-unchecked").removeClass("glyphicon-check");
-            filaPare.attr("seleccionat", 0);
-            comprovaSeleccionades();
-        }
-
-    });
-
-    accions.on('click', '.opcions .mail', function(){
-        console.log("mail");
-    });
-
-
-    /*
-     * ACCIONS VARIS REGISTRES
-     */
-
-    /*** eliminar registres seleccionats ***/
-    accionsGeneral.on('click', '#eliminar-registres', function(){
-        var accioClicada = this,
-            registres = $("#registres tbody tr[seleccionat='1']")
-            idRegistres = [];
-
-        registres.each(function(){
-            idRegistres.push($(this).data("id"));
         });
 
+        /*** editar registre ***/
+        accions.on('click', '.editar-registre', function(){
+            var accioClicada = this;
+            var data = $(this).parent().siblings(".camp-data"),
+                horaInicial = $(this).parent().siblings(".camp-hora_inicial"),
+                horaFinal = $(this).parent().siblings(".camp-hora_final"),
+                tempsTotal = $(this).parent().siblings(".camp-temps_total"),
+                client = $(this).parent().siblings(".camp-client"),
+                concepte = $(this).parent().siblings(".camp-concepte"),
+                descripcio = $(this).parent().siblings(".camp-descripcio"),
+                idRegistre = $(this).parent().parent().data("id"),
+                formulari = $(this).parent().parent().find(".form-control"),
+                altresIconesAccions = $(this).parent().parent().siblings().children().children("span");
 
-        var confirmacio = confirm("Estas segur de que vols eliminar els registres?");
-        if(confirmacio){
-            $.ajax({
-                url: 'accions.php?data=' + idRegistres + "",
-                type: 'DELETE',
-                success: function(data){
-                    registres.fadeOut("slow");
-                    registres.remove();
-                    comprovaSeleccionades();
-                },
-                error: function(data){
-                    console.log("Error al eliminar en massa.");
-                }
-            });
-        }
+            //no estem editant
+            if ($(this).hasClass("glyphicon-pencil")) {
+                copiaText();
+                descripcio.html("");
+                $(this).removeClass("glyphicon-pencil").addClass("glyphicon-ok");
+                $(this).siblings("span").hide();
+                $(this).parent().append("<span class='glyphicon glyphicon-remove cancela'></span>");
+                altresIconesAccions.hide();
 
-    });
+                fesCampsEditables();
 
-    /*** copiar registres seleccionats ***/
-    accionsGeneral.on('click', '#copia-registres', function(){
-        var registreFormatat;
+            } else { // estem editant
+                if (formulariValid()) { // comprovem si es valid el formulari
+                    copiaValors(true);
+                    // enviem la peticio al servidor
+                    $.ajax({
+                        url: 'accions.php?id='+ idRegistre +"&"+ formulari.serialize(),
+                        type: 'POST',
+                        context: accioClicada,
+                        success: function(data){
+                            return console.log(data);
+                        },
+                        //beforeSend: function(){console.log(formulari.serialize());},
+                        error: function(data){
+                            console.log("Error");
+                        }
+                    });
+                    surtModeEdicio();
+                    $(this).addClass("glyphicon-pencil").removeClass("glyphicon-ok");
+                    $(this).siblings("span.glyphicon-remove.cancela").remove();
+                    altresIconesAccions.show();
+                    $(this).siblings("span").show();
+                } else { // formulari no valid
+                    alert("Camps invalids, comproveu que no hi haigui cap camp buit i que la data d'inici no sigui mes gran que la final.");
+                } // validacio formulari
+            } // comprovacio editant
 
-        var registres = $("#registres tbody tr[seleccionat='1']");
-        registreFormatat = exportaRegistres(registres, true);
-
-        function copiaRegistre() {
-            var textArea = document.createElement("textarea");
-            textArea.value = registreFormatat;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                var successful = document.execCommand('copy');
-                if (successful) {
-                    $("#registres tr[seleccionat='1']").fadeOut(50).fadeIn(300);
-                } else {
-                    alert("Hi ha hagut un error i no s'ha pogut copiar el registre.");
-                }
-            } catch (err) {
-                console.log('Oops, unable to copy', err);
+            function formulariValid() { // funcio validar form
+                if(data.children().val() == "" || horaInicial.children().val() >= horaFinal.children().val() || client.children().val() == "" || concepte.children().val() == "" || descripcio.children().val() == "") 
+                    return false;
+                return true;
             }
-            document.body.removeChild(textArea);
-        }
-        copiaRegistre();
-    });
 
-    /*** enviar registres seleccionats ***/
-    accionsGeneral.on('click', '#enviar-registres', function(){
-        var caixa = $(this).parent().find(".enviar-registres-opcions");
-        if (!caixa.hasClass("visible"))
-            caixa.addClass("visible");
-        else
-            caixa.removeClass("visible");
-    });
+            function copiaText(){ //copia el text del html
+                vdata = data.text().trim();
+                vhoraInicial = horaInicial.text().trim();
+                vhoraFinal = horaFinal.text().trim();
+                vclient = client.text().trim();
+                vconcepte = concepte.text().trim();
+                vdescripcio = descripcio.text().trim();
+                vtempsTotal = tempsTotal.text().trim();
+            }
 
-    /*** enviar registre ***/
-    accions.on('click', '.enviar-registre', function(){
-        var caixa = $(this).parent().find(".enviar-registre-opcions");
-        if (!caixa.hasClass("visible"))
-            caixa.addClass("visible");
-        else
-            caixa.removeClass("visible");
-    });
+            function copiaValors(guardar = false){ //copia els valors del formulari
+                vdata = data.children().val();
+                vhoraInicial = horaInicial.children().val();
+                vhoraFinal = horaFinal.children().val();
+                vtempsTotal = tempsTotal.text();
+                vclient = client.children().val();
+                vconcepte = concepte.children().val();
+                vdescripcio = descripcio.children().val();
+                if(guardar){
+                    var timestampFinal = (new Date(vdata + " " + vhoraFinal).getTime() / 1000);
+                    var timestampInici = (new Date(vdata + " " + vhoraInicial).getTime() / 1000);
+                    vtempsTotal = (timestampFinal - timestampInici) / 3600 + "h";
+                    vdata = vdata.split("-");
+                    vdata = vdata[2] + "/" + vdata[1] + "/" + vdata[0].charAt(2) + vdata[0].charAt(3);
+                }
+            }
 
-    /*** seleccionar tots registres ***/
-    accionsGeneral.on('click', '#seleccionar-registres', function(){
-        var registres = $("#registres tbody tr"),
-            checks = $(".seleccionar-registre"),
-            totsSeleccionats = 0,
-            numSeleccionats = 0;
-        
-        registres.each(function(){
-            if ($(this).attr("seleccionat") == "1")
-                numSeleccionats++;
+            function fesCampsEditables(){ // sustitueix els camps per camps editables amb les dades que teniem
+                data.html("<input type='date' name='data' class='form-control' style='width:90%;'>");
+                var dataAsetar = vdata.split("/");
+                dataAsetar = dataAsetar[2]+"-"+dataAsetar[1]+"-"+dataAsetar[0];
+                data.children("input").val(dataAsetar);
+
+                horaInicial.html('<input type="time" step="900" name="hora_inici" id="hora_inici" class="form-control">');
+                horaInicial.children().val(vhoraInicial);
+                horaInicial.on("change", function(){
+                    var horaIni = $(accioClicada).parent().siblings(".camp-hora_inicial").children("input").val().trim();
+                    var horaFi = $(accioClicada).parent().siblings(".camp-hora_final").children("input").val().trim();
+                    updateTempsTotal(horaIni, horaFi);
+                });
+
+                horaFinal.html('<input type="time" step="900" name="hora_fi" id="hora_fi" class="form-control">');
+                horaFinal.children().val(vhoraFinal);
+                horaFinal.on("change", function(){
+                    var horaIni = $(accioClicada).parent().siblings(".camp-hora_inicial").children("input").val().trim();
+                    var horaFi = $(accioClicada).parent().siblings(".camp-hora_final").children("input").val().trim();
+                    updateTempsTotal(horaIni, horaFi);
+                });
+
+                tempsTotal.html('<input type="text" name="temps_total" id="temps_total" class="form-control" value="'+vtempsTotal+'" readonly>');
+                client.html('<input type="text" name="client" id="client" class="form-control" value="'+vclient+'">');
+
+                concepte.html('<input type="text" name="conc" id="conc" class="form-control" value="'+vconcepte+'">');
+
+                descripcio.html('<input type="text" name="descripcio" id="descripcio" class="form-control" value="'+vdescripcio+'">');
+                function updateTempsTotal(horaIni, horaFi) {
+                    var timestampFinal = (new Date(vdata + " " + horaFi).getTime() / 1000);
+                    var timestampInici = (new Date(vdata + " " + horaIni).getTime() / 1000);
+                    var tt = (timestampFinal - timestampInici) / 3600;
+                    tempsTotal.children("input").val(parseFloat(tt));
+                }
+            }
+
+            function surtModeEdicio(){ //sortim de mode edicio, deixem les dades com estaven o les noves, en cas de haver fet la peticio
+                data.html(vdata);
+                horaInicial.html(vhoraInicial);
+                horaFinal.html(vhoraFinal);
+                tempsTotal.html(vtempsTotal);
+                client.html(vclient);
+                concepte.html(vconcepte);
+                descripcio.html(vdescripcio);
+            }
+
         });
-        if (numSeleccionats == registres.length) {
-            registres.attr("seleccionat", 0);
-            checks.removeClass("glyphicon-check").addClass("glyphicon-unchecked");
-            $(this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
-        } else {
-            registres.attr("seleccionat", 1);
-            checks.removeClass("glyphicon-unchecked").addClass("glyphicon-check");
-            $(this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
-        }
-        comprovaSeleccionades();
-    });
 
-    accionsGeneral.on('click', '.opcions-registres .mail', function(){
-        console.log("mail");
-    });
+        /*** cancelar edicio registre ***/
+        accions.on('click', 'span.glyphicon-remove.cancela', function(){
+            var accioClicada = this,
+                data = $(this).parent().siblings(".camp-data"),
+                horaInicial = $(this).parent().siblings(".camp-hora_inicial"),
+                horaFinal = $(this).parent().siblings(".camp-hora_final"),
+                tempsTotal = $(this).parent().siblings(".camp-temps_total"),
+                client = $(this).parent().siblings(".camp-client"),
+                concepte = $(this).parent().siblings(".camp-concepte"),
+                descripcio = $(this).parent().siblings(".camp-descripcio"),
+                altresIconesAccions = $(this).parent().parent().siblings().children().children("span");
 
-    accionsGeneral.on('click', '.opcions-registres .excel', function(){
-        var registresFormatats,
-            regs = $("#registres tbody tr[seleccionat='1']");
+            tornaValors();
 
-        registresFormatats = exportaRegistres(regs, true, true);
+            function tornaValors() { //recuperem els valors inicials
+                data.html(vdata);
+                horaInicial.html(vhoraInicial);
+                horaFinal.html(vhoraFinal);
+                tempsTotal.html(vtempsTotal);
+                client.html(vclient);
+                concepte.html(vconcepte);
+                descripcio.html(vdescripcio);
+            }
+            $(this).siblings(".editar-registre").addClass("glyphicon-pencil").removeClass("glyphicon-ok");
+            $(this).siblings("span").show();
+            altresIconesAccions.show();
+            $(this).remove();
+        });
 
-        exportaCSV(registresFormatats, "registres-");
+        /*** copiar registre ***/
+        accions.on('click', '.copia-registre', function(){
+            var aquest = this,
+                registreFormatat;
 
-        function exportaCSV(regs, titolFitxer) {
-            var caixaCompartir = $(this).parent().parent();
-            var titol = titolFitxer + '.csv' || 'registres.csv';
-            var csv = converteixRegistresACSV(regs);
-            var fitxer = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            registreFormatat = exportaRegistres([aquest]);
 
-            if (navigator.msSaveBlob) { // IE 10+
-                navigator.msSaveBlob(fitxer, titol);
+            function copiaRegistre() {
+                var textArea = document.createElement("textarea");
+                textArea.value = registreFormatat;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    var successful = document.execCommand('copy');
+                    if (successful) {
+                        $(aquest).parent().parent().fadeOut(50).fadeIn(300);
+                    } else {
+                        alert("Hi ha hagut un error i no s'ha pogut copiar el registre.");
+                    }
+                } catch (err) {
+                    console.log('Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            copiaRegistre();
+        });
+
+        /*** seleccionar registre ***/
+        accions.on('click', '.seleccionar-registre', function(){
+            var check = $(this),
+                filaPare = $(this).parent().parent();
+
+            if (check.hasClass("glyphicon-unchecked")) {
+                check.addClass("glyphicon-check").removeClass("glyphicon-unchecked");
+                filaPare.attr("seleccionat", 1);
+                if(!accionsGeneral.hasClass("visible"))
+                    accionsGeneral.addClass("visible");
             } else {
-                var enllas = document.createElement("a");
-                if (enllas.download !== undefined) {
-                    var url = URL.createObjectURL(fitxer);
-                    enllas.setAttribute("href", url);
-                    enllas.setAttribute("download", titol);
-                    enllas.style.visibility = 'hidden';
-                    document.body.appendChild(enllas);
-                    enllas.click();
-                    document.body.removeChild(enllas);
-                }
+                check.addClass("glyphicon-unchecked").removeClass("glyphicon-check");
+                filaPare.attr("seleccionat", 0);
+                comprovaSeleccionades();
             }
-            caixaCompartir.removeClass("visible");
 
-        }
-        function converteixRegistresACSV(regs) {
-            var regsCSV = '';
-            for(var i = 0; i <= regs.length-1; i++){
-                var data = regs[i]["data"].split("/");
-                data = data[0]+"/"+data[1]+"/20"+data[2];
-                regsCSV += "patri;;;"+data+';'+parseFloat(regs[i]["temps_total"])+';'+regs[i]["client"]+';'+regs[i]["concepte"]+';'+regs[i]["descripcio"]+';'+'\r\n';
-            }
-            
-            return regsCSV;
-        }
-    });
-
-    accionsGeneral.on('click', '.opcions-registres .fitxer', function(){
-        var registresFormatats,
-            regs = $("#registres tbody tr[seleccionat='1']");
-
-        registresFormatats = exportaRegistres(regs, true);
-
-        exportaFitxer(registresFormatats);
-
-        function exportaFitxer(regs) {
-            var caixaCompartir = $(this).parent().parent();
-            var titol = prompt("Nom del fitxer: ") || 'registre(s).json';
-            var fitxer = new Blob([regs], { type: 'application/json;charset=utf-8;' });
-
-            if (navigator.msSaveBlob) { // IE 10+
-                navigator.msSaveBlob(fitxer, titol);
-            } else {
-                var enllas = document.createElement("a");
-                if (enllas.download !== undefined) {
-                    var url = URL.createObjectURL(fitxer);
-                    enllas.setAttribute("href", url);
-                    enllas.setAttribute("download", titol);
-                    enllas.style.visibility = 'hidden';
-                    document.body.appendChild(enllas);
-                    enllas.click();
-                    document.body.removeChild(enllas);
-                }
-            }
-            caixaCompartir.removeClass("visible");
-        }
-    });
-
-    accionsGeneral.on('click', '.opcions-registres .tancar', function(){
-        var caixaCompartir = $(this).parent().parent();
-        if (!caixaCompartir.hasClass("visible"))
-            caixaCompartir.addClass("visible");
-        else
-            caixaCompartir.removeClass("visible");
-    });
-
-
-
-
-    /*
-     * FUNCIONS GENERALS
-     */
-
-    function comprovaSeleccionades() {
-        var files = $("#taula-registres tr"),
-            algunSeleccionat = 0;
-
-        files.each(function(){
-            if ($(this).attr("seleccionat") == "1")
-                algunSeleccionat = 1;
         });
-        if (!algunSeleccionat)
-            accionsGeneral.removeClass("visible");
-    }
 
-    function exportaRegistres(context, general = false, json=false) {
-        var aquest = $(context),
-            registre = [],
-            vregistre = [],
-            textRegistres="";
+        accions.on('click', '.opcions .mail', function(){
+            console.log("mail");
+        });
 
-        if(!general)
-            aquest.each(function(){registre.push($(this).parent().parent().find("td"));});
-        else 
-            registre = aquest;
 
-        registre = $(registre);
-        registre.each(function(index){
-            if (!general) {
-                var reg = $(this).toArray();
-            } else {
-                var reg = $(this).children();
-            }
-            reg = $.grep(reg, function(r){ return !$(r).hasClass("accions"); });
-            reg = $(reg);
-            vregistre[index] = [];
-            reg.each(function(){
-                return vregistre[index].push($(this).text().trim());
+        /*
+         * ACCIONS VARIS REGISTRES
+         */
+
+        /*** eliminar registres seleccionats ***/
+        accionsGeneral.on('click', '#eliminar-registres', function(){
+            var accioClicada = this,
+                registres = $("#registres tbody tr[seleccionat='1']")
+                idRegistres = [];
+
+            registres.each(function(){
+                idRegistres.push($(this).data("id"));
             });
+
+
+            var confirmacio = confirm("Estas segur de que vols eliminar els registres?");
+            if(confirmacio){
+                $.ajax({
+                    url: 'accions.php?data=' + idRegistres + "",
+                    type: 'DELETE',
+                    success: function(data){
+                        registres.fadeOut("slow");
+                        registres.remove();
+                        comprovaSeleccionades();
+                    },
+                    error: function(data){
+                        console.log("Error al eliminar en massa.");
+                    }
+                });
+            }
+
         });
-        vregistre = $(vregistre);
-        vregistre.each(function(index){
-            if (index == 0)
-                textRegistres = "[\n";
-            if (index != vregistre.length - 1)
-                textRegistres += '\t{\n\t\t"data" : "'+$(this)[0]+'",\n\t\t"hora_inici" : "'+$(this)[1]+'",\n\t\t"hora_fi" : "'+$(this)[2]+'",\n\t\t"temps_total" : "'+$(this)[3]+'",\n\t\t"client" : "'+$(this)[4]+'",\n\t\t"concepte" : "'+$(this)[5]+'",\n\t\t"descripcio" : "'+$(this)[6]+'"\n\t},\n';
+
+        /*** copiar registres seleccionats ***/
+        accionsGeneral.on('click', '#copia-registres', function(){
+            var registreFormatat;
+
+            var registres = $("#registres tbody tr[seleccionat='1']");
+            registreFormatat = exportaRegistres(registres, true);
+
+            function copiaRegistre() {
+                var textArea = document.createElement("textarea");
+                textArea.value = registreFormatat;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    var successful = document.execCommand('copy');
+                    if (successful) {
+                        $("#registres tr[seleccionat='1']").fadeOut(50).fadeIn(300);
+                    } else {
+                        alert("Hi ha hagut un error i no s'ha pogut copiar el registre.");
+                    }
+                } catch (err) {
+                    console.log('Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+            copiaRegistre();
+        });
+
+        /*** enviar registres seleccionats ***/
+        accionsGeneral.on('click', '#enviar-registres', function(){
+            var caixa = $(this).parent().find(".enviar-registres-opcions");
+            if (!caixa.hasClass("visible"))
+                caixa.addClass("visible");
             else
-                textRegistres += '\t{\n\t\t"data" : "'+$(this)[0]+'",\n\t\t"hora_inici" : "'+$(this)[1]+'",\n\t\t"hora_fi" : "'+$(this)[2]+'",\n\t\t"temps_total" : "'+$(this)[3]+'",\n\t\t"client" : "'+$(this)[4]+'",\n\t\t"concepte" : "'+$(this)[5]+'",\n\t\t"descripcio" : "'+$(this)[6]+'"\n\t}\n]';
-            
+                caixa.removeClass("visible");
         });
 
-        if (json) return JSON.parse(textRegistres);
+        /*** enviar registre ***/
+        accions.on('click', '.enviar-registre', function(){
+            var caixa = $(this).parent().find(".enviar-registre-opcions");
+            if (!caixa.hasClass("visible"))
+                caixa.addClass("visible");
+            else
+                caixa.removeClass("visible");
+        });
 
-        return textRegistres;
+        /*** seleccionar tots registres ***/
+        accionsGeneral.on('click', '#seleccionar-registres', function(){
+            var registres = $("#registres tbody tr"),
+                checks = $(".seleccionar-registre"),
+                totsSeleccionats = 0,
+                numSeleccionats = 0;
+            
+            registres.each(function(){
+                if ($(this).attr("seleccionat") == "1")
+                    numSeleccionats++;
+            });
+            if (numSeleccionats == registres.length) {
+                registres.attr("seleccionat", 0);
+                checks.removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+                $(this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+            } else {
+                registres.attr("seleccionat", 1);
+                checks.removeClass("glyphicon-unchecked").addClass("glyphicon-check");
+                $(this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
+            }
+            comprovaSeleccionades();
+        });
+
+        accionsGeneral.on('click', '.opcions-registres .mail', function(){
+            console.log("mail");
+        });
+
+        accionsGeneral.on('click', '.opcions-registres .excel', function(){
+            var registresFormatats,
+                regs = $("#registres tbody tr[seleccionat='1']");
+
+            registresFormatats = exportaRegistres(regs, true, true);
+
+            exportaCSV(registresFormatats, prompt("Digues nom del fitxer: ") || "registres", $(this));
+        });
+
+        accionsGeneral.on('click', '.opcions-registres .fitxer', function(){
+            var registresFormatats,
+                regs = $("#registres tbody tr[seleccionat='1']");
+
+            registresFormatats = exportaRegistres(regs, true);
+
+            exportaFitxer(registresFormatats);
+
+            function exportaFitxer(regs) {
+                var caixaCompartir = $(this).parent().parent();
+                var titol = prompt("Nom del fitxer: ") || 'registre(s).json';
+                var fitxer = new Blob([regs], { type: 'application/json;charset=utf-8;' });
+
+                if (navigator.msSaveBlob) { // IE 10+
+                    navigator.msSaveBlob(fitxer, titol);
+                } else {
+                    var enllas = document.createElement("a");
+                    if (enllas.download !== undefined) {
+                        var url = URL.createObjectURL(fitxer);
+                        enllas.setAttribute("href", url);
+                        enllas.setAttribute("download", titol);
+                        enllas.style.visibility = 'hidden';
+                        document.body.appendChild(enllas);
+                        enllas.click();
+                        document.body.removeChild(enllas);
+                    }
+                }
+                caixaCompartir.removeClass("visible");
+            }
+        });
+
+        accionsGeneral.on('click', '.opcions-registres .tancar', function(){
+            var caixaCompartir = $(this).parent().parent();
+            if (!caixaCompartir.hasClass("visible"))
+                caixaCompartir.addClass("visible");
+            else
+                caixaCompartir.removeClass("visible");
+        });
+
+
+
+
+        /*
+         * FUNCIONS GENERALS
+         */
+
+        function comprovaSeleccionades() {
+            var files = $("#taula-registres tr"),
+                algunSeleccionat = 0;
+
+            files.each(function(){
+                if ($(this).attr("seleccionat") == "1")
+                    algunSeleccionat = 1;
+            });
+            if (!algunSeleccionat)
+                accionsGeneral.removeClass("visible");
+        }
+
+        function exportaRegistres(context, general = false, json=false) {
+            var aquest = $(context),
+                registre = [],
+                vregistre = [],
+                textRegistres="";
+
+            if(!general)
+                aquest.each(function(){registre.push($(this).parent().parent().find("td"));});
+            else 
+                registre = aquest;
+
+            registre = $(registre);
+            registre.each(function(index){
+                if (!general) {
+                    var reg = $(this).toArray();
+                } else {
+                    var reg = $(this).children();
+                }
+                reg = $.grep(reg, function(r){ return !$(r).hasClass("accions"); });
+                reg = $(reg);
+                vregistre[index] = [];
+                reg.each(function(){
+                    return vregistre[index].push($(this).text().trim());
+                });
+            });
+            vregistre = $(vregistre);
+            vregistre.each(function(index){
+                if (index == 0)
+                    textRegistres = "[\n";
+                if (index != vregistre.length - 1)
+                    textRegistres += '\t{\n\t\t"data" : "'+$(this)[0]+'",\n\t\t"hora_inici" : "'+$(this)[1]+'",\n\t\t"hora_fi" : "'+$(this)[2]+'",\n\t\t"temps_total" : "'+$(this)[3]+'",\n\t\t"client" : "'+$(this)[4]+'",\n\t\t"concepte" : "'+$(this)[5]+'",\n\t\t"descripcio" : "'+$(this)[6]+'"\n\t},\n';
+                else
+                    textRegistres += '\t{\n\t\t"data" : "'+$(this)[0]+'",\n\t\t"hora_inici" : "'+$(this)[1]+'",\n\t\t"hora_fi" : "'+$(this)[2]+'",\n\t\t"temps_total" : "'+$(this)[3]+'",\n\t\t"client" : "'+$(this)[4]+'",\n\t\t"concepte" : "'+$(this)[5]+'",\n\t\t"descripcio" : "'+$(this)[6]+'"\n\t}\n]';
+                
+            });
+
+            if (json) return JSON.parse(textRegistres);
+
+            return textRegistres;
+        }
     }
 });
 

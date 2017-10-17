@@ -1,4 +1,15 @@
 <script>
+    var hores_mes;
+    $.ajax({
+        url: 'accions.php?configuracions=hores_mes',
+        type: 'GET',
+        success: function(data){
+            hores_mes = JSON.parse(data);
+        },
+        error: function(data){
+            console.log("Error: " + data);
+        }
+    });
     $(document).ready(function(){
         console.log("Horari carregat...");
         var mesos = $(".mes"), 
@@ -8,32 +19,23 @@
             hores_acumulades = 0,
             horesDiariesMes;
 
-        $.ajax({
-            url: 'accions.php?configuracions=hores_mes',
-            type: 'GET',
-            success: function(data){
-                horesDiariesMes = data["data"];
-                return console.log(data);
-            },
-            error: function(data){
-                console.log("Error: " + data);
-            }
-        });
-
         mesos.each(function(){
             var temps = $(this).parent().siblings().children("td"),
                 sum = 0, 
                 numDiesMes = 0, 
                 total_mes = 0,
-                recompte_hores = 0;
+                recompte_hores = 0
+                mes = $(this).data("mes"),
+                any = $(this).data("any");
 
+            horesDiariesMes = hores_mes[any][parseInt(mes)];
             temps.each(function(){
                 tt = $(this).children(".temps-total").html().trim();
                 sum += parseFloat(tt);
                 numDiesMes++;
             });
             total_mes = sum;
-            recompte_hores = (total_mes - (7 /*horesDiariesMes*/ * numDiesMes)).toFixed(2);
+            recompte_hores = (total_mes - (horesDiariesMes * numDiesMes)).toFixed(2);
             hores_acumulades += parseFloat(recompte_hores);
             $(this).next().html("Total: "+total_mes+"h");
         });
@@ -42,7 +44,7 @@
 
         dia.on("click", function(){
             diaClicat = this;
-            var data = $(this).children(".data").text().trim();
+            var data = $(this).children(".data").data("date").trim();
             var altresDies = $('td.registres-on');
 
             if (!$(this).hasClass("registres-on")) {

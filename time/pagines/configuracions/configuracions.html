@@ -1,0 +1,115 @@
+<script>
+	var mesosConfig,
+		mesos = $("#hores-mensuals"),
+		nomsMesos = {
+			"1" : "Gener",
+	        "2" : "Febrer",
+	        "3" : "Març",
+	        "4" : "Abril",
+	        "5" : "Maig",
+	        "6" : "Juny",
+	        "7" : "Juliol",
+	        "8" : "Agost",
+	        "9" : "Setembre",
+	        "10" : "Octubre",
+	        "11" : "Novembre",
+	        "12" : "Desembre"
+		};
+	$.ajax({
+        url: 'accions.php?configuracions=hores_mes',
+        type: 'GET',
+        success: function(data){
+        	mesosConfig = JSON.parse(data);
+        	console.log(mesosConfig);
+        	var mesosHTML = '<h2>Hores Mensuals</h2>';
+			for(k in mesosConfig) {
+				mesosHTML += '<div class="any" data-any="'+k+'"><h3 class="titol">Any: <span>'+k+'</span></h3>';
+				mesosHTML += '<div class="mesos">';
+				for (j in mesosConfig[k]) {
+					mesosHTML += '<div class="mes" data-mes="'+j+'">';
+					mesosHTML += '<h5 class="subtitol">Mes: <span>'+nomsMesos[j]+'</span></h5>';
+					mesosHTML += '<div class="elimina-mes close">&times;</div>';
+					mesosHTML += '<div class="hores">';
+					mesosHTML += '<h5 class="subtitol">Hores:</h5><input class="form-control" type="number" min="1" max="8" data-hores="'+mesosConfig[k][j]+'" value="'+mesosConfig[k][j]+'"></div>';
+					mesosHTML += '<button class="btn btn-primary update-mes">Actualitza</button>';
+					mesosHTML += '</div>';
+				}
+				mesosHTML += '</div></div>';
+				mesos.append(mesosHTML);
+			}
+            return console.log(data);
+        },
+        error: function(data){
+            console.log("Error: " + data);
+        }
+    });
+
+
+    $(document).ready(function(){
+        $(".update-mes").click(function(){
+        	var	any = $(this).parent().parent().parent().data("any"),
+        		mes = $(this).parent().data("mes"),
+        		hores = parseInt($(this).siblings(".hores").children("input").val()),
+        		aquest = this;
+
+        	igual = igualHoraAnterior();
+
+        	if(!igual) {
+		        $.ajax({
+		            url: 'accions.php?configuracions=hores_mes&mes='+mes+'&any='+any+'&hores='+hores,
+		            type: 'POST',
+		            context: aquest,
+		            success: function(data){
+        				mesosConfig[any][mes] = hores;
+		            	$(aquest).parent().hide().fadeIn('slow');
+		                return console.log(data);
+		            },
+		            error: function(data){
+		                console.log("Error: " + data);
+		            }
+		        });
+        	} else {
+        		console.log("El valor no ha cambiat.");
+        	}
+
+        	function igualHoraAnterior(){
+        		if (hores == mesosConfig[any][mes]) {
+        			return true;
+        		} else {
+        			return false;
+        		}
+        	}
+        });
+
+        $(".elimina-mes").click(function(){
+        	var mesEliminar = $(this).parent().data("mes"),
+        		anyEliminar = $(this).parent().parent().parent().data("any"),
+        		aquest = this;
+
+        	segur = confirm("Estas segur de que vols eliminar el mes?");
+
+        	if(segur){
+	        	$.ajax({
+	        		url: 'accions.php?configuracions=elimina_mes&any='+anyEliminar+'&mes='+mesEliminar,
+	        		type: 'DELETE',
+	        		context: aquest,
+	        		success: function(data){
+			        	totsMesosAny = $(this).parent().parent().children();
+			        	if(totsMesosAny.length == 1) {
+				        	$(aquest).parent().parent().parent().remove();
+			        	} else {
+				        	$(aquest).parent().remove();
+			        	}
+	        			console.log(data);
+	        		},
+	        		error: function(data){
+	        			console.log('Error: ' + data);
+	        		}
+	        	});
+        	} else {
+        		console.log("Eliminacio del mes cancelada per l'usuari.");
+        	}
+
+        });
+    });
+</script>

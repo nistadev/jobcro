@@ -92,19 +92,17 @@ main{
     color: red;
 }
 
-.loading:after {
-    content: "";
-    background-image: url("../img/loader.gif");
-    background-position: center;
-    background-size: 250%;
-    width: 50px;
-    height: 50px;
-    display: block;
+.loading {
+    content: url(../img/loader.gif);
+    text-align: center;
+    width: auto !important;
+    margin: 0 auto;
 }
 
-#taula-registres tbody.loading tr{
+#registres.loading tr{
     display: none;
 }
+
 #taula-registres tr[seleccionat="1"]{
     background-color: #f5f5f5;
     border: 1px double #111;
@@ -297,5 +295,59 @@ main{
 
 .estadistiques-consulta td {
     font-size: 24px;
-
 }
+
+#configuracions #hores-mensuals .any{
+    margin: 35px 20px;
+}
+#hores-mensuals .mesos {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+#hores-mensuals .mes {
+    margin: 15px;
+    padding: 15px;
+    position: relative;
+}
+
+#hores-mensuals .mes .elimina-mes{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    right: 0;
+    display: none;
+}
+#hores-mensuals .mes:hover .elimina-mes{
+    display: block;
+}
+
+#hores-mensuals .update-mes {
+    margin-top: 10px;
+    position: absolute;
+    bottom: -34px;
+    right: 0;
+    display: none;
+}
+
+#hores-mensuals .mes:hover .update-mes {
+    display: block;
+}
+
+#hores-mensuals .mes span {
+    padding-left: 15px;
+    font-weight: normal;
+}
+
+#hores-mensuals .hores .subtitol{
+    display: inline-block;
+    padding-right: 15px;
+}
+
+#hores-mensuals .hores input{
+    display: inline-block;
+    width: auto;
+}
+
+

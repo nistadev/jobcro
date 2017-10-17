@@ -10,8 +10,8 @@
     if (isset($page) && $page != "") {
         include("connection.php");
         if ($page == "entra_hores"){
-            include("formularis/entrar_hores/entrar_hores.php");
-            include("formularis/entrar_hores/entrar_hores.html");
+            include("pagines/entrar_hores/entrar_hores.php");
+            include("pagines/entrar_hores/entrar_hores.html");
         } else if ($page == "registres") {
             include("pagines/registres/registres.php");
             include("pagines/registres/registres.html");
@@ -25,8 +25,8 @@
             include("pagines/estadistiques/estadistiques.php");
             include("pagines/estadistiques/estadistiques.html");
         } elseif ($page == "configuracions") {
-            include("formularis/configuracions/configuracions.php");
-            include("formularis/configuracions/configuracions.html");
+            include("pagines/configuracions/configuracions.php");
+            include("pagines/configuracions/configuracions.html");
         } else {
             echo "<h1 class='text-center'>404 Not Found</h1>";
             echo "<div class='text-center'>La pagina <strong>".$page."</strong> no ha estat trobada</div>"; 
